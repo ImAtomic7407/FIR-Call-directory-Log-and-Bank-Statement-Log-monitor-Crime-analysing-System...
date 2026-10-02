@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+pandas
+networkx
+litellm
+reportlab
+pydantic
+scipy
+httpx2

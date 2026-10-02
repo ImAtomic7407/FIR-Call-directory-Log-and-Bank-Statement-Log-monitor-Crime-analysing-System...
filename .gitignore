@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+**/node_modules/
+.venv/
+**/.venv/
+venv/
+env/
+
+# Environment files & Secrets
+.env
+.env.*
+*.env
+**/.env
+
+# Python cache
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
+
+# OS generated files
+.DS_Store
+**/.DS_Store
+Thumbs.db
+
+# Build outputs
+dist/
+**/dist/
+build/
+**/build/
+
+# Application cache / local files
+backend/cache/
+**/cache/
+
+# IDE / Tooling configs
+.claude/
+.impeccable/
+**/.impeccable/

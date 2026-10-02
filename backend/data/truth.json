@@ -1,0 +1,1758 @@
+{
+  "note": "GROUND TRUTH FOR TESTING ONLY. The application must not read this file.",
+  "groups": {
+    "G1": "Rathore smuggling syndicate",
+    "G2": "Hawala & finance network",
+    "G3": "Vehicle theft ring",
+    "G4": "Cyber-fraud call centre",
+    "G5": "Extortion gang (hidden)"
+  },
+  "persons": {
+    "P01": {
+      "canonical": "Bhuvan Rathore",
+      "aliases": [
+        "Bunty",
+        "B. Rathore"
+      ],
+      "group": "G1",
+      "role": "leader",
+      "phones": [
+        "9804332181",
+        "9930365414"
+      ],
+      "org": "Rathore Logistics",
+      "vehicle": {
+        "plate": "DL3CAB1234",
+        "desc": "white Innova"
+      },
+      "account": "BOB-8995059760",
+      "alias_stated_explicitly": true
+    },
+    "P02": {
+      "canonical": "Ojas Dwivedi",
+      "aliases": [
+        "Oju",
+        "O. Dwivedi"
+      ],
+      "group": "G1",
+      "role": "lieutenant",
+      "phones": [
+        "9989083863"
+      ],
+      "org": null,
+      "vehicle": null,
+      "account": "PNB-8033702319",
+      "alias_stated_explicitly": false
+    },
+    "P03": {
+      "canonical": "Yashvir Shekhawat",
+      "aliases": [
+        "Yashu",
+        "Y. Shekhawat"
+      ],
+      "group": "G1",
+      "role": "courier",
+      "phones": [
+        "8894026542"
+      ],
+      "org": "Rathore Logistics",
+      "vehicle": {
+        "plate": "DL4CFL2519",
+        "desc": "grey Bolero"
+      },
+      "account": "AXIS-6322520473",
+      "alias_stated_explicitly": true
+    },
+    "P04": {
+      "canonical": "Hemant Mittal",
+      "aliases": [
+        "Hemu",
+        "H. Mittal"
+      ],
+      "group": "G1",
+      "role": "member",
+      "phones": [
+        "9855940781"
+      ],
+      "org": null,
+      "vehicle": null,
+      "account": "PNB-9922723063",
+      "alias_stated_explicitly": false
+    },
+    "P05": {
+      "canonical": "Kuldeep Khatri",
+      "aliases": [
+        "Kuldi",
+        "K. Khatri"
+      ],
+      "group": "G1",
+      "role": "financier",
+      "phones": [
+        "8818495931"
+      ],
+      "org": null,
+      "vehicle": null,
+      "account": "ICICI-6302109556",
+      "alias_stated_explicitly": true
+    },
+    "P06": {
+      "canonical": "Tushar Rawal",
+      "aliases": [
+        "Tushi",
+        "T. Rawal"
+      ],
+      "group": "G1",
+      "role": "member",
+      "phones": [
+        "9834131647"
+      ],
+      "org": null,
+      "vehicle": null,
+      "account": "ICICI-3319936135",
+      "alias_stated_explicitly": false
+    },
+    "P07": {
+      "canonical": "Chirag Bhadana",
+      "aliases": [
+        "Chiku",
+        "C. Bhadana"
+      ],
+      "group": "G1",
+      "role": "courier",
+      "phones": [
+        "9725534192"
+      ],
+      "org": "Rathore Logistics",
+      "vehicle": {
+        "plate": "DL9CDM8573",
+        "desc": "grey Bolero"
+      },
+      "account": "HDFC-1647812758",
+      "alias_stated_explicitly": true
+    },
+    "P08": {
+      "canonical": "Omkar Lohia",
+      "aliases": [
+        "Ommi",
+        "O. Lohia"
+      ],
+      "group": "G1",
+      "role": "member",
+      "phones": [
+        "9783503056"
+      ],
+      "org": null,
+      "vehicle": null,
+      "account": "PNB-3980491761",
+      "alias_stated_explicitly": false
+    },
+    "P09": {
+      "canonical": "Devansh Baisla",
+      "aliases": [
+        "Devu",
+        "D. Baisla"
+      ],
+      "group": "G1",
+      "role": "member",
+      "phones": [
+        "9713953767"
+      ],
+      "org": null,
+      "vehicle": null,
+      "account": "BOB-1918920620",
+      "alias_stated_explicitly": true
+    },
+    "P10": {
+      "canonical": "Nirmal Kashyap",
+      "aliases": [
+        "Nimmu",
+        "N. Kashyap"
+      ],
+      "group": "G1",
+      "role": "member",
+      "phones": [
+        "9942388496"
+      ],
+      "org": null,
+      "vehicle": null,
+      "account": "PNB-7045593274",
+      "alias_stated_explicitly": false
+    },
+    "P11": {
+      "canonical": "Jatin Singhal",
+      "aliases": [
+        "Jatinbhai",
+        "J. Singhal"
+      ],
+      "group": "G2",
+      "role": "leader",
+      "phones": [
+        "7065328710"
+      ],
+      "org": "Singhal Traders",
+      "vehicle": {
+        "plate": "DL2CCM7916",
+        "desc": "red Pulsar bike"
+      },
+      "account": "AXIS-7296096954",
+      "alias_stated_explicitly": true
+    },
+    "P12": {
+      "canonical": "Prakhar Lodha",
+      "aliases": [
+        "Prakhu",
+        "P. Lodha"
+      ],
+      "group": "G2",
+      "role": "member",
+      "phones": [
+        "9866978480"
+      ],
+      "org": "Singhal Traders",
+      "vehicle": null,
+      "account": "SBI-7099469983",
+      "alias_stated_explicitly": false
+    },
+    "P13": {
+      "canonical": "Shailesh Parikh",
+      "aliases": [
+        "Shellu",
+        "S. Parikh"
+      ],
+      "group": "G2",
+      "role": "member",
+      "phones": [
+        "9884514627"
+      ],
+      "org": null,
+      "vehicle": null,
+      "account": "AXIS-7767538527",
+      "alias_stated_explicitly": true
+    },
+    "P14": {
+      "canonical": "Bhupesh Mangla",
+      "aliases": [
+        "Bhupi",
+        "B. Mangla"
+      ],
+      "group": "G2",
+      "role": "member",
+      "phones": [
+        "9848281489"
+      ],
+      "org": null,
+      "vehicle": null,
+      "account": "PNB-6805759868",
+      "alias_stated_explicitly": false
+    },
+    "P15": {
+      "canonical": "Ritesh Garg",
+      "aliases": [
+        "Ritz",
+        "R. Garg"
+      ],
+      "group": "G2",
+      "role": "member",
+      "phones": [
+        "9925288095"
+      ],
+      "org": null,
+      "vehicle": null,
+      "account": "PNB-6242173772",
+      "alias_stated_explicitly": true
+    },
+    "P16": {
+      "canonical": "Mayank Mathur",
+      "aliases": [
+        "Mayu",
+        "M. Mathur"
+      ],
+      "group": "G2",
+      "role": "member",
+      "phones": [
+        "8801543039"
+      ],
+      "org": null,
+      "vehicle": null,
+      "account": "HDFC-6467215542",
+      "alias_stated_explicitly": false
+    },
+    "P17": {
+      "canonical": "Kamlesh Ahuja",
+      "aliases": [
+        "Kammo",
+        "K. Ahuja"
+      ],
+      "group": "G2",
+      "role": "member",
+      "phones": [
+        "9817182278"
+      ],
+      "org": null,
+      "vehicle": null,
+      "account": "PNB-5419627962",
+      "alias_stated_explicitly": true
+    },
+    "P18": {
+      "canonical": "Vipul Bhasin",
+      "aliases": [
+        "Vippy",
+        "V. Bhasin"
+      ],
+      "group": "G2",
+      "role": "member",
+      "phones": [
+        "9948963834"
+      ],
+      "org": null,
+      "vehicle": null,
+      "account": "ICICI-8722962486",
+      "alias_stated_explicitly": false
+    },
+    "P19": {
+      "canonical": "Zubair Pathan",
+      "aliases": [
+        "Zubi",
+        "Z. Pathan"
+      ],
+      "group": "G3",
+      "role": "leader",
+      "phones": [
+        "8857871331"
+      ],
+      "org": "Pathan Auto Parts",
+      "vehicle": {
+        "plate": "DL3CAB1234",
+        "desc": "white Innova"
+      },
+      "account": "BOB-1116402431",
+      "alias_stated_explicitly": true
+    },
+    "P20": {
+      "canonical": "Nadeem Shaikh",
+      "aliases": [
+        "Nadu",
+        "N. Shaikh"
+      ],
+      "group": "G3",
+      "role": "member",
+      "phones": [
+        "9803105183"
+      ],
+      "org": "Pathan Auto Parts",
+      "vehicle": null,
+      "account": "BOB-2840877826",
+      "alias_stated_explicitly": false
+    },
+    "P21": {
+      "canonical": "Arshad Mirza",
+      "aliases": [
+        "Ashu",
+        "A. Mirza"
+      ],
+      "group": "G3",
+      "role": "member",
+      "phones": [
+        "9773829973"
+      ],
+      "org": null,
+      "vehicle": {
+        "plate": "DL8CGN2545",
+        "desc": "white Innova"
+      },
+      "account": "PNB-1780520225",
+      "alias_stated_explicitly": true
+    },
+    "P22": {
+      "canonical": "Tabrez Haider",
+      "aliases": [
+        "Tabbu",
+        "T. Haider"
+      ],
+      "group": "G3",
+      "role": "member",
+      "phones": [
+        "8856670106"
+      ],
+      "org": null,
+      "vehicle": null,
+      "account": "ICICI-6923206003",
+      "alias_stated_explicitly": false
+    },
+    "P23": {
+      "canonical": "Faizan Khatri",
+      "aliases": [
+        "Faizu",
+        "F. Khatri"
+      ],
+      "group": "G3",
+      "role": "member",
+      "phones": [
+        "9713338726"
+      ],
+      "org": null,
+      "vehicle": {
+        "plate": "DL3CET5092",
+        "desc": "white Creta"
+      },
+      "account": "HDFC-7247886041",
+      "alias_stated_explicitly": true
+    },
+    "P24": {
+      "canonical": "Sohail Rizvi",
+      "aliases": [
+        "Sohu",
+        "S. Rizvi"
+      ],
+      "group": "G3",
+      "role": "member",
+      "phones": [
+        "9878108013"
+      ],
+      "org": null,
+      "vehicle": null,
+      "account": "ICICI-6923301988",
+      "alias_stated_explicitly": false
+    },
+    "P25": {
+      "canonical": "Wasim Farooqui",
+      "aliases": [
+        "Wasu",
+        "W. Farooqui"
+      ],
+      "group": "G3",
+      "role": "member",
+      "phones": [
+        "9967736026"
+      ],
+      "org": null,
+      "vehicle": null,
+      "account": "PNB-5646751885",
+      "alias_stated_explicitly": true
+    },
+    "P26": {
+      "canonical": "Danish Usmani",
+      "aliases": [
+        "Danny",
+        "D. Usmani"
+      ],
+      "group": "G3",
+      "role": "member",
+      "phones": [
+        "9864746872"
+      ],
+      "org": null,
+      "vehicle": null,
+      "account": "SBI-9383431259",
+      "alias_stated_explicitly": false
+    },
+    "P27": {
+      "canonical": "Ishaan Talwar",
+      "aliases": [
+        "Ishu",
+        "I. Talwar"
+      ],
+      "group": "G4",
+      "role": "leader",
+      "phones": [
+        "9943098050",
+        "9786850142"
+      ],
+      "org": "QuickConnect BPO",
+      "vehicle": null,
+      "account": "HDFC-3792347639",
+      "alias_stated_explicitly": true
+    },
+    "P28": {
+      "canonical": "Pranav Sahni",
+      "aliases": [
+        "Pranu",
+        "P. Sahni"
+      ],
+      "group": "G4",
+      "role": "member",
+      "phones": [
+        "9897882081"
+      ],
+      "org": "QuickConnect BPO",
+      "vehicle": null,
+      "account": "BOB-2062073697",
+      "alias_stated_explicitly": false
+    },
+    "P29": {
+      "canonical": "Siddhant Grover",
+      "aliases": [
+        "Siddy",
+        "S. Grover"
+      ],
+      "group": "G4",
+      "role": "member",
+      "phones": [
+        "9919136193"
+      ],
+      "org": "QuickConnect BPO",
+      "vehicle": null,
+      "account": "SBI-3668616333",
+      "alias_stated_explicitly": true
+    },
+    "P30": {
+      "canonical": "Lakshay Kohli",
+      "aliases": [
+        "Lucky",
+        "L. Kohli"
+      ],
+      "group": "G4",
+      "role": "mule",
+      "phones": [
+        "7090916998"
+      ],
+      "org": null,
+      "vehicle": null,
+      "account": "HDFC-5837082260",
+      "alias_stated_explicitly": false
+    },
+    "P31": {
+      "canonical": "Parth Wadhwa",
+      "aliases": [
+        "Paru",
+        "P. Wadhwa"
+      ],
+      "group": "G4",
+      "role": "mule",
+      "phones": [
+        "9743534624"
+      ],
+      "org": null,
+      "vehicle": null,
+      "account": "BOB-5070585433",
+      "alias_stated_explicitly": true
+    },
+    "P32": {
+      "canonical": "Dhruv Bedi",
+      "aliases": [
+        "Dhruvy",
+        "D. Bedi"
+      ],
+      "group": "G4",
+      "role": "mule",
+      "phones": [
+        "8851079911"
+      ],
+      "org": null,
+      "vehicle": null,
+      "account": "PNB-8299146480",
+      "alias_stated_explicitly": false
+    },
+    "P33": {
+      "canonical": "Ritika Suri",
+      "aliases": [
+        "Riti",
+        "R. Suri"
+      ],
+      "group": "G4",
+      "role": "member",
+      "phones": [
+        "7038425135"
+      ],
+      "org": "QuickConnect BPO",
+      "vehicle": null,
+      "account": "ICICI-4518871744",
+      "alias_stated_explicitly": true
+    },
+    "P34": {
+      "canonical": "Tanvi Mehra",
+      "aliases": [
+        "Tanu",
+        "T. Mehra"
+      ],
+      "group": "G4",
+      "role": "member",
+      "phones": [
+        "9727849808"
+      ],
+      "org": "QuickConnect BPO",
+      "vehicle": null,
+      "account": "ICICI-9410288290",
+      "alias_stated_explicitly": false
+    },
+    "P35": {
+      "canonical": "Manjeet Sandhu",
+      "aliases": [
+        "Mannu",
+        "M. Sandhu"
+      ],
+      "group": "G5",
+      "role": "leader",
+      "phones": [
+        "9712411824"
+      ],
+      "org": null,
+      "vehicle": {
+        "plate": "DL5CDR4335",
+        "desc": "blue Eicher truck"
+      },
+      "account": "PNB-1851819913",
+      "alias_stated_explicitly": true
+    },
+    "P36": {
+      "canonical": "Baljeet Sandhu",
+      "aliases": [
+        "Bally",
+        "B. Sandhu"
+      ],
+      "group": "G5",
+      "role": "member",
+      "phones": [
+        "9787401640"
+      ],
+      "org": null,
+      "vehicle": null,
+      "account": "AXIS-3693985578",
+      "alias_stated_explicitly": false
+    },
+    "P37": {
+      "canonical": "Kulwant Brar",
+      "aliases": [
+        "Wantu",
+        "K. Brar"
+      ],
+      "group": "G5",
+      "role": "member",
+      "phones": [
+        "9852427868"
+      ],
+      "org": null,
+      "vehicle": null,
+      "account": "SBI-4459716271",
+      "alias_stated_explicitly": true
+    },
+    "P38": {
+      "canonical": "Sukhdev Grewal",
+      "aliases": [
+        "Sukhi",
+        "S. Grewal"
+      ],
+      "group": "G5",
+      "role": "member",
+      "phones": [
+        "9811280598"
+      ],
+      "org": null,
+      "vehicle": null,
+      "account": "AXIS-4361393222",
+      "alias_stated_explicitly": false
+    },
+    "N01": {
+      "canonical": "Bhuvan Lohia",
+      "aliases": [
+        "Bhuvan",
+        "B. Lohia"
+      ],
+      "group": null,
+      "role": "decoy (shopkeeper, shares first name with Bhuvan Rathore)",
+      "phones": [
+        "9962045053"
+      ],
+      "org": null,
+      "vehicle": null,
+      "account": "ICICI-7583090712",
+      "alias_stated_explicitly": false
+    },
+    "N02": {
+      "canonical": "Ojas Kashyap",
+      "aliases": [
+        "Ojas",
+        "O. Kashyap"
+      ],
+      "group": null,
+      "role": "decoy (bank clerk, shares first name with Ojas Dwivedi)",
+      "phones": [
+        "9915869232"
+      ],
+      "org": null,
+      "vehicle": null,
+      "account": "BOB-2591589823",
+      "alias_stated_explicitly": false
+    },
+    "N04": {
+      "canonical": "Kamla Negi",
+      "aliases": [
+        "Kamla",
+        "K. Negi"
+      ],
+      "group": null,
+      "role": "victim",
+      "phones": [
+        "9960256342"
+      ],
+      "org": null,
+      "vehicle": null,
+      "account": "AXIS-8076144396",
+      "alias_stated_explicitly": false
+    },
+    "N05": {
+      "canonical": "Gopal Nair",
+      "aliases": [
+        "Gopal",
+        "G. Nair"
+      ],
+      "group": null,
+      "role": "victim",
+      "phones": [
+        "9860733754"
+      ],
+      "org": null,
+      "vehicle": null,
+      "account": "SBI-8943866829",
+      "alias_stated_explicitly": false
+    }
+  },
+  "unresolved_phones": [
+    "7040196556",
+    "7081693406",
+    "9888356159",
+    "9714846564",
+    "7023662994",
+    "8880443699",
+    "9777738721",
+    "9789513433",
+    "9900379176",
+    "7036763201",
+    "8832870831",
+    "8827889579"
+  ],
+  "fir_mentions": {
+    "FIR-001": [
+      {
+        "surface": "Chirag Bhadana",
+        "person_id": "P07"
+      },
+      {
+        "surface": "Ommi",
+        "person_id": "P08"
+      },
+      {
+        "surface": "Chiku",
+        "person_id": "P07"
+      }
+    ],
+    "FIR-002": [
+      {
+        "surface": "Wasim Farooqui",
+        "person_id": "P25"
+      },
+      {
+        "surface": "Danish Usmani",
+        "person_id": "P26"
+      },
+      {
+        "surface": "Wasu",
+        "person_id": "P25"
+      }
+    ],
+    "FIR-003": [
+      {
+        "surface": "Dhruv Bedi",
+        "person_id": "P32"
+      },
+      {
+        "surface": "Ritika Suri",
+        "person_id": "P33"
+      }
+    ],
+    "FIR-004": [
+      {
+        "surface": "Sohail Rizvi",
+        "person_id": "P24"
+      },
+      {
+        "surface": "Wasim Farooqui",
+        "person_id": "P25"
+      }
+    ],
+    "FIR-005": [
+      {
+        "surface": "Lakshay Kohli",
+        "person_id": "P30"
+      },
+      {
+        "surface": "Paru",
+        "person_id": "P31"
+      },
+      {
+        "surface": "Lucky",
+        "person_id": "P30"
+      }
+    ],
+    "FIR-006": [
+      {
+        "surface": "Tabrez Haider",
+        "person_id": "P22"
+      },
+      {
+        "surface": "Faizu",
+        "person_id": "P23"
+      }
+    ],
+    "FIR-007": [
+      {
+        "surface": "Bhupesh Mangla",
+        "person_id": "P14"
+      },
+      {
+        "surface": "Ritz",
+        "person_id": "P15"
+      }
+    ],
+    "FIR-008": [
+      {
+        "surface": "Vipul Bhasin",
+        "person_id": "P18"
+      },
+      {
+        "surface": "Jatinbhai",
+        "person_id": "P11"
+      }
+    ],
+    "FIR-009": [
+      {
+        "surface": "Bhuvan Rathore",
+        "person_id": "P01"
+      },
+      {
+        "surface": "Oju",
+        "person_id": "P02"
+      },
+      {
+        "surface": "Bunty",
+        "person_id": "P01"
+      }
+    ],
+    "FIR-010": [
+      {
+        "surface": "Ommi",
+        "person_id": "P08"
+      },
+      {
+        "surface": "Omkar Lohia",
+        "person_id": "P08"
+      }
+    ],
+    "FIR-011": [
+      {
+        "surface": "Tanvi Mehra",
+        "person_id": "P34"
+      },
+      {
+        "surface": "Ishu",
+        "person_id": "P27"
+      }
+    ],
+    "FIR-012": [
+      {
+        "surface": "Nirmal Kashyap",
+        "person_id": "P10"
+      },
+      {
+        "surface": "Bunty",
+        "person_id": "P01"
+      }
+    ],
+    "FIR-013": [
+      {
+        "surface": "Arshad Mirza",
+        "person_id": "P21"
+      },
+      {
+        "surface": "Tabbu",
+        "person_id": "P22"
+      },
+      {
+        "surface": "Ashu",
+        "person_id": "P21"
+      }
+    ],
+    "FIR-014": [
+      {
+        "surface": "Parth Wadhwa",
+        "person_id": "P31"
+      },
+      {
+        "surface": "Dhruvy",
+        "person_id": "P32"
+      },
+      {
+        "surface": "Paru",
+        "person_id": "P31"
+      },
+      {
+        "surface": "Paru",
+        "person_id": "P31"
+      }
+    ],
+    "FIR-015": [
+      {
+        "surface": "Mayank Mathur",
+        "person_id": "P16"
+      },
+      {
+        "surface": "K. Ahuja",
+        "person_id": "P17"
+      },
+      {
+        "surface": "Mayu",
+        "person_id": "P16"
+      }
+    ],
+    "FIR-016": [
+      {
+        "surface": "Jatin Singhal",
+        "person_id": "P11"
+      },
+      {
+        "surface": "Prakhu",
+        "person_id": "P12"
+      },
+      {
+        "surface": "Jatinbhai",
+        "person_id": "P11"
+      }
+    ],
+    "FIR-017": [
+      {
+        "surface": "Tushar Rawal",
+        "person_id": "P06"
+      },
+      {
+        "surface": "C. Bhadana",
+        "person_id": "P07"
+      }
+    ],
+    "FIR-018": [
+      {
+        "surface": "Bhuvan Lohia",
+        "person_id": "N01"
+      }
+    ],
+    "FIR-019": [
+      {
+        "surface": "Siddhant Grover",
+        "person_id": "P29"
+      },
+      {
+        "surface": "Lucky",
+        "person_id": "P30"
+      },
+      {
+        "surface": "Siddy",
+        "person_id": "P29"
+      }
+    ],
+    "FIR-020": [
+      {
+        "surface": "Kuldeep Khatri",
+        "person_id": "P05"
+      },
+      {
+        "surface": "Tushi",
+        "person_id": "P06"
+      },
+      {
+        "surface": "Kuldi",
+        "person_id": "P05"
+      }
+    ],
+    "FIR-021": [
+      {
+        "surface": "Bunty",
+        "person_id": "P01"
+      },
+      {
+        "surface": "Ojas",
+        "person_id": "P02",
+        "ambiguous": true,
+        "candidates": [
+          "P02",
+          "N02"
+        ]
+      }
+    ],
+    "FIR-022": [
+      {
+        "surface": "Yashvir Shekhawat",
+        "person_id": "P03"
+      },
+      {
+        "surface": "Hemu",
+        "person_id": "P04"
+      },
+      {
+        "surface": "Yashu",
+        "person_id": "P03"
+      }
+    ],
+    "FIR-023": [
+      {
+        "surface": "Kulwant Brar",
+        "person_id": "P37"
+      },
+      {
+        "surface": "S. Grewal",
+        "person_id": "P38"
+      },
+      {
+        "surface": "Wantu",
+        "person_id": "P37"
+      },
+      {
+        "surface": "Wantu",
+        "person_id": "P37"
+      }
+    ],
+    "FIR-024": [
+      {
+        "surface": "Nadeem Shaikh",
+        "person_id": "P20"
+      },
+      {
+        "surface": "A. Mirza",
+        "person_id": "P21"
+      }
+    ],
+    "FIR-025": [
+      {
+        "surface": "Arshad Mirza",
+        "person_id": "P21"
+      }
+    ],
+    "FIR-026": [
+      {
+        "surface": "Ritesh Garg",
+        "person_id": "P15"
+      },
+      {
+        "surface": "Mayu",
+        "person_id": "P16"
+      },
+      {
+        "surface": "Ritz",
+        "person_id": "P15"
+      },
+      {
+        "surface": "Ritz",
+        "person_id": "P15"
+      }
+    ],
+    "FIR-027": [
+      {
+        "surface": "Faizan Khatri",
+        "person_id": "P23"
+      },
+      {
+        "surface": "S. Rizvi",
+        "person_id": "P24"
+      },
+      {
+        "surface": "Faizu",
+        "person_id": "P23"
+      },
+      {
+        "surface": "Faizu",
+        "person_id": "P23"
+      }
+    ],
+    "FIR-028": [
+      {
+        "surface": "Devansh Baisla",
+        "person_id": "P09"
+      },
+      {
+        "surface": "Nimmu",
+        "person_id": "P10"
+      },
+      {
+        "surface": "Devu",
+        "person_id": "P09"
+      }
+    ],
+    "FIR-029": [
+      {
+        "surface": "Ojas Kashyap",
+        "person_id": "N02"
+      }
+    ],
+    "FIR-030": [
+      {
+        "surface": "Zubi",
+        "person_id": "P19"
+      }
+    ],
+    "FIR-031": [
+      {
+        "surface": "B. Rathore",
+        "person_id": "P01"
+      }
+    ],
+    "FIR-032": [
+      {
+        "surface": "Hemant Mittal",
+        "person_id": "P04"
+      },
+      {
+        "surface": "Kuldi",
+        "person_id": "P05"
+      }
+    ],
+    "FIR-033": [
+      {
+        "surface": "Kamlesh Ahuja",
+        "person_id": "P17"
+      },
+      {
+        "surface": "Vippy",
+        "person_id": "P18"
+      },
+      {
+        "surface": "Kammo",
+        "person_id": "P17"
+      }
+    ],
+    "FIR-034": [
+      {
+        "surface": "Bunty",
+        "person_id": "P01"
+      },
+      {
+        "surface": "Jatinbhai",
+        "person_id": "P11"
+      },
+      {
+        "surface": "Zubi",
+        "person_id": "P19"
+      },
+      {
+        "surface": "I. Talwar",
+        "person_id": "P27"
+      }
+    ],
+    "FIR-035": [
+      {
+        "surface": "Danish Usmani",
+        "person_id": "P26"
+      },
+      {
+        "surface": "Zubair Pathan",
+        "person_id": "P19"
+      },
+      {
+        "surface": "Danny",
+        "person_id": "P26"
+      }
+    ],
+    "FIR-036": [
+      {
+        "surface": "Zubair Pathan",
+        "person_id": "P19"
+      },
+      {
+        "surface": "N. Shaikh",
+        "person_id": "P20"
+      },
+      {
+        "surface": "Zubi",
+        "person_id": "P19"
+      }
+    ],
+    "FIR-037": [
+      {
+        "surface": "Ishaan Talwar",
+        "person_id": "P27"
+      },
+      {
+        "surface": "Pranu",
+        "person_id": "P28"
+      },
+      {
+        "surface": "Ishu",
+        "person_id": "P27"
+      }
+    ],
+    "FIR-038": [
+      {
+        "surface": "Manjeet Sandhu",
+        "person_id": "P35"
+      },
+      {
+        "surface": "Bally",
+        "person_id": "P36"
+      },
+      {
+        "surface": "Mannu",
+        "person_id": "P35"
+      },
+      {
+        "surface": "Mannu",
+        "person_id": "P35"
+      }
+    ],
+    "FIR-039": [
+      {
+        "surface": "Omkar Lohia",
+        "person_id": "P08"
+      },
+      {
+        "surface": "Devu",
+        "person_id": "P09"
+      }
+    ],
+    "FIR-040": [
+      {
+        "surface": "Shailesh Parikh",
+        "person_id": "P13"
+      },
+      {
+        "surface": "Bhupi",
+        "person_id": "P14"
+      },
+      {
+        "surface": "Shellu",
+        "person_id": "P13"
+      }
+    ],
+    "FIR-041": [
+      {
+        "surface": "Siddy",
+        "person_id": "P29"
+      }
+    ],
+    "FIR-042": [
+      {
+        "surface": "Kamla Negi",
+        "person_id": "N04"
+      },
+      {
+        "surface": "Ishu",
+        "person_id": "P27"
+      }
+    ],
+    "FIR-043": [
+      {
+        "surface": "Gopal Nair",
+        "person_id": "N05"
+      },
+      {
+        "surface": "Riti",
+        "person_id": "P33"
+      }
+    ],
+    "FIR-044": [
+      {
+        "surface": "Pranav Sahni",
+        "person_id": "P28"
+      },
+      {
+        "surface": "Siddy",
+        "person_id": "P29"
+      }
+    ],
+    "FIR-045": [
+      {
+        "surface": "Baljeet Sandhu",
+        "person_id": "P36"
+      },
+      {
+        "surface": "K. Brar",
+        "person_id": "P37"
+      }
+    ],
+    "FIR-046": [
+      {
+        "surface": "Ojas Dwivedi",
+        "person_id": "P02"
+      },
+      {
+        "surface": "Yashvir Shekhawat",
+        "person_id": "P03"
+      },
+      {
+        "surface": "Oju",
+        "person_id": "P02"
+      }
+    ],
+    "FIR-047": [
+      {
+        "surface": "Sukhdev Grewal",
+        "person_id": "P38"
+      },
+      {
+        "surface": "Mannu",
+        "person_id": "P35"
+      },
+      {
+        "surface": "Sukhi",
+        "person_id": "P38"
+      }
+    ],
+    "FIR-048": [
+      {
+        "surface": "Prakhar Lodha",
+        "person_id": "P12"
+      },
+      {
+        "surface": "Shellu",
+        "person_id": "P13"
+      }
+    ],
+    "FIR-049": [
+      {
+        "surface": "Ritika Suri",
+        "person_id": "P33"
+      },
+      {
+        "surface": "Tanu",
+        "person_id": "P34"
+      },
+      {
+        "surface": "Riti",
+        "person_id": "P33"
+      },
+      {
+        "surface": "Riti",
+        "person_id": "P33"
+      }
+    ]
+  },
+  "relations": [
+    {
+      "a": "P01",
+      "b": "P02",
+      "relation": "driver",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P02",
+      "b": "P03",
+      "relation": "financier",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P03",
+      "b": "P04",
+      "relation": "driver",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P04",
+      "b": "P05",
+      "relation": "driver",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P05",
+      "b": "P06",
+      "relation": "cousin",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P06",
+      "b": "P07",
+      "relation": "associate",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P07",
+      "b": "P08",
+      "relation": "driver",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P08",
+      "b": "P09",
+      "relation": "cousin",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P09",
+      "b": "P10",
+      "relation": "cousin",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P10",
+      "b": "P01",
+      "relation": "financier",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P11",
+      "b": "P12",
+      "relation": "cousin",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P12",
+      "b": "P13",
+      "relation": "associate",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P13",
+      "b": "P14",
+      "relation": "cousin",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P14",
+      "b": "P15",
+      "relation": "associate",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P15",
+      "b": "P16",
+      "relation": "trusted aide",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P16",
+      "b": "P17",
+      "relation": "trusted aide",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P17",
+      "b": "P18",
+      "relation": "trusted aide",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P18",
+      "b": "P11",
+      "relation": "cousin",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P19",
+      "b": "P20",
+      "relation": "driver",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P20",
+      "b": "P21",
+      "relation": "financier",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P21",
+      "b": "P22",
+      "relation": "financier",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P22",
+      "b": "P23",
+      "relation": "associate",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P23",
+      "b": "P24",
+      "relation": "driver",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P24",
+      "b": "P25",
+      "relation": "associate",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P25",
+      "b": "P26",
+      "relation": "business partner",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P26",
+      "b": "P19",
+      "relation": "trusted aide",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P27",
+      "b": "P28",
+      "relation": "associate",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P28",
+      "b": "P29",
+      "relation": "driver",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P29",
+      "b": "P30",
+      "relation": "cousin",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P30",
+      "b": "P31",
+      "relation": "driver",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P31",
+      "b": "P32",
+      "relation": "associate",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P32",
+      "b": "P33",
+      "relation": "associate",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P33",
+      "b": "P34",
+      "relation": "associate",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P34",
+      "b": "P27",
+      "relation": "financier",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P35",
+      "b": "P36",
+      "relation": "brother",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P36",
+      "b": "P37",
+      "relation": "trusted aide",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P37",
+      "b": "P38",
+      "relation": "trusted aide",
+      "source": "fir_intro"
+    },
+    {
+      "a": "P38",
+      "b": "P35",
+      "relation": "driver",
+      "source": "fir_intro"
+    }
+  ],
+  "patterns": {
+    "burst_calling": [
+      {
+        "person": "P01",
+        "phone": "9930365414",
+        "call_ids": [
+          "C0222",
+          "C0223",
+          "C0224",
+          "C0225",
+          "C0226",
+          "C0227",
+          "C0228",
+          "C0229",
+          "C0230",
+          "C0231",
+          "C0232",
+          "C0233",
+          "C0234",
+          "C0235",
+          "C0236",
+          "C0237"
+        ],
+        "date": "2026-08-14"
+      },
+      {
+        "person": "P27",
+        "phone": "9786850142",
+        "call_ids": [
+          "C0326",
+          "C0327",
+          "C0328",
+          "C0329",
+          "C0330",
+          "C0331",
+          "C0332",
+          "C0333",
+          "C0334",
+          "C0335",
+          "C0336",
+          "C0337",
+          "C0338",
+          "C0339",
+          "C0340",
+          "C0341",
+          "C0342",
+          "C0343",
+          "C0344",
+          "C0345",
+          "C0346",
+          "C0347",
+          "C0348",
+          "C0349",
+          "C0350"
+        ],
+        "date": "2026-08-30"
+      }
+    ],
+    "circular_transfers": [
+      {
+        "kind": "3-hop",
+        "persons": [
+          "P11",
+          "P13",
+          "P16"
+        ],
+        "txn_ids": [
+          "T0046",
+          "T0048",
+          "T0049"
+        ]
+      },
+      {
+        "kind": "4-hop",
+        "persons": [
+          "P05",
+          "P14",
+          "P22",
+          "P07"
+        ],
+        "txn_ids": [
+          "T0056",
+          "T0060",
+          "T0063",
+          "T0064"
+        ]
+      }
+    ],
+    "layering": {
+      "source": "P27",
+      "mules": [
+        "P30",
+        "P31",
+        "P32"
+      ],
+      "sink": "P11",
+      "txn_ids": [
+        "T0076",
+        "T0078",
+        "T0079",
+        "T0081",
+        "T0084",
+        "T0085"
+      ]
+    },
+    "shared_phone": {
+      "phone": "9899077700",
+      "persons": [
+        "P08",
+        "P21",
+        "P29"
+      ],
+      "note": "different people - do NOT merge"
+    },
+    "shared_vehicle": {
+      "plate": "DL3CAB1234",
+      "persons": [
+        "P01",
+        "P19"
+      ]
+    },
+    "bridge": {
+      "groups": [
+        "G2",
+        "G4"
+      ],
+      "first_contact": "2026-08-26",
+      "call_ids": [
+        "C0314",
+        "C0317",
+        "C0324",
+        "C0325",
+        "C0356",
+        "C0361",
+        "C0375",
+        "C0382",
+        "C0385",
+        "C0390",
+        "C0394",
+        "C0396",
+        "C0400",
+        "C0402",
+        "C0417",
+        "C0423",
+        "C0428",
+        "C0435",
+        "C0445"
+      ],
+      "txn_ids": [
+        "T0073",
+        "T0093"
+      ]
+    },
+    "colocation": {
+      "tower": "T-12",
+      "date": "2026-08-25",
+      "window": "19:00-19:30",
+      "persons": [
+        "P01",
+        "P11",
+        "P19",
+        "P27"
+      ],
+      "call_ids": [
+        "C0297",
+        "C0298",
+        "C0299",
+        "C0300"
+      ]
+    },
+    "g1_transfers_over_50k": [
+      "T0022",
+      "T0037",
+      "T0045",
+      "T0055",
+      "T0072",
+      "T0089",
+      "T0098"
+    ]
+  },
+  "resolution_traps": {
+    "merge": [
+      [
+        "P01: Bhuvan Rathore / Bunty / B. Rathore (linked by phone2 + Rathore Logistics)"
+      ]
+    ],
+    "do_not_merge": [
+      "Bhuvan Lohia (N01) vs Bhuvan Rathore (P01)",
+      "Ojas Kashyap (N02) vs Ojas Dwivedi (P02)",
+      "9899077700 is shared by P08/P21/P29 but they are three people"
+    ],
+    "ambiguous_mentions": [
+      {
+        "surface": "Ojas",
+        "person_id": "P02",
+        "ambiguous": true,
+        "candidates": [
+          "P02",
+          "N02"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Case Diary — Network File</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --board:#b0874a; --board-2:#9a7339; --board-ink:#3b2810; --tape:#a8231b;
+  --sheet:#f8f9f5; --rule:#cfdbe9; --margin:#d6534b;
+  --ink:#1c2453; --ink-2:#4a5078; --pencil:#6f6f6b; --red:#b3261e; --green:#0d6a3d; --violet:#5a3e98;
+  --text:#22242c; --muted:#5c5f69;
+  --hand:'Source Serif 4',Georgia,serif; --type:'Courier Prime',ui-monospace,monospace; --sans:'Hind',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+html,body{min-height:100%}
+body{color:var(--text);font:16px/1.5 var(--sans);-webkit-font-smoothing:antialiased;
+  background-color:var(--board);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .23 0 0 0 0 .16 0 0 0 0 .06 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+::selection{background:#f3d36b;color:var(--text)}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
+.tab{font-variant-numeric:tabular-nums}
+
+header{display:flex;align-items:center;gap:22px;padding:14px 28px 10px;color:var(--board-ink);flex-wrap:wrap}
+.cover{display:flex;flex-direction:column}
+.cover b{font:600 23px/1.1 var(--hand);letter-spacing:.01em}
+.cover span{font:500 14px var(--sans);color:#4e3816}
+.tally{display:flex;gap:18px;margin-left:auto;font:700 15px var(--type);color:var(--board-ink)}
+.tally span{display:flex;gap:6px;align-items:baseline}.tally small{font:500 13px var(--sans)}
+.ai{font:700 13px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--green);border:2px solid var(--green);padding:3px 10px;border-radius:3px;transform:rotate(-2deg);background:rgba(255,255,255,.25)}
+.ai.off{color:var(--violet);border-color:var(--violet)}
+
+.spread{display:grid;grid-template-columns:minmax(360px,420px) minmax(0,1fr);gap:0;margin:6px 22px 22px;height:calc(100vh - 92px);min-height:640px;position:relative;
+  filter:drop-shadow(0 14px 22px rgba(52,34,8,.35)) drop-shadow(0 2px 3px rgba(52,34,8,.3))}
+.spread::before{content:"";position:absolute;left:0;right:0;top:50%;height:22px;margin-top:-11px;background:var(--tape);z-index:3;pointer-events:none;
+  clip-path:polygon(0 0,100% 0,100% 100%,0 100%);opacity:0}
+.page{background:var(--sheet);position:relative;min-height:0;display:flex;flex-direction:column}
+.left{border-radius:3px 0 0 3px;border-right:1px solid #d9dbd2;
+  background-image:linear-gradient(90deg,transparent 46px,var(--margin) 46px,var(--margin) 47px,transparent 47px)}
+.right{border-radius:0 3px 3px 0;box-shadow:inset 14px 0 18px -14px rgba(60,40,10,.25)}
+
+/* flags along the left page top */
+.flags{display:flex;gap:4px;padding:14px 18px 0 60px}
+.flag{border:1px solid #cfc8b4;border-bottom:0;background:#efe7cf;padding:6px 14px 7px;border-radius:4px 4px 0 0;font:600 15px var(--sans);color:var(--muted);position:relative;top:1px}
+.flag[aria-selected="true"]{background:var(--sheet);color:var(--text);border-color:#cfd1c6}
+.flag i{font:700 12px var(--type);font-style:normal;color:var(--red);margin-left:6px}
+.flagline{border-top:1px solid #cfd1c6;margin:0 0 0 0}
+.leaf{flex:1;overflow:auto;padding:16px 22px 26px 62px;min-height:0}
+.leaf::-webkit-scrollbar{width:8px}.leaf::-webkit-scrollbar-thumb{background:#d6d2c2;border-radius:4px}
+.leaf h2{font:600 23px/1.2 var(--hand);color:var(--green);margin-bottom:4px}
+.leaf .lede{color:var(--muted);font-size:15px;margin-bottom:14px}
+
+/* notings = alerts */
+.noting{position:relative;display:block;width:100%;text-align:left;background:none;border:0;padding:12px 0 14px;border-bottom:1px solid var(--rule)}
+.noting .para{position:absolute;left:-44px;top:12px;font:700 15px var(--type);color:var(--ink-2)}
+.noting b{display:block;font:600 17px/1.3 var(--sans);color:var(--ink)}
+.noting .kind{font:700 13px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--red)}
+.noting .kind.medium{color:#9a5a00}
+.noting p{font-size:14.5px;color:var(--muted);margin-top:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.noting:hover b{text-decoration:underline;text-decoration-color:var(--ink-2);text-underline-offset:3px}
+.noting.sel{background:linear-gradient(90deg,rgba(243,211,107,.45),rgba(243,211,107,0) 85%)}
+.stamp{position:absolute;right:4px;top:10px;font:700 14px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--violet);border:2.5px double var(--violet);padding:0 7px;border-radius:4px;transform:rotate(-8deg);opacity:.85}
+
+.person-row{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--rule);padding:10px 0}
+.person-row .no{font:700 14px var(--type);color:var(--ink-2);width:30px;margin-left:-44px;text-align:right;flex:none}
+.person-row b{font:600 16px var(--sans);color:var(--ink);display:block}
+.person-row small{font-size:13.5px;color:var(--muted);display:block;line-height:1.3}
+.person-row .r{margin-left:auto;font:700 18px var(--type)}
+.person-row .r.high{color:var(--red)}.person-row .r.medium{color:#9a5a00}
+.person-row:hover b{text-decoration:underline;text-underline-offset:3px}
+
+/* ask */
+.ask-sheet{display:flex;flex-direction:column;gap:14px}
+.qa .q{font:600 17px/1.4 var(--hand);color:var(--ink)}
+.qa .a{font:15px/1.6 var(--type);color:var(--text);background:#fff;border:1px solid #dcdfd5;padding:10px 12px;margin-top:6px;white-space:pre-wrap;word-break:break-word}
+.qa .src{display:flex;gap:12px;align-items:center;font:600 13px var(--sans);color:var(--muted);margin-top:6px}
+.qa .src button{background:none;border:0;padding:0;color:var(--violet);text-decoration:underline;text-underline-offset:3px;font:inherit}
+.examples{display:flex;flex-wrap:wrap;gap:6px}
+.examples button{background:#fff;border:1px solid #cfd3c6;border-radius:3px;padding:4px 9px;font:500 14px var(--sans);color:var(--ink)}
+.examples button:hover{border-color:var(--ink)}
+form.ask{display:flex;gap:8px;border-top:1px solid #cfd1c6;padding:12px 18px 14px 62px;background:var(--sheet)}
+form.ask input{flex:1;min-width:0;border:0;border-bottom:2px solid var(--ink);background:transparent;padding:6px 2px;font:400 17px var(--sans);color:var(--ink);caret-color:var(--red)}
+form.ask input::placeholder{color:#8c90a3}
+form.ask input:focus{outline:none;border-bottom-color:var(--violet)}
+form.ask button{background:var(--ink);color:#fff;border:0;border-radius:3px;padding:0 16px;font:600 15px var(--sans)}
+form.ask button[disabled]{opacity:.4}
+
+/* right page */
+.rhead{display:flex;align-items:center;gap:16px;padding:16px 22px 10px 30px;flex-wrap:wrap}
+.rhead h2{font:600 23px var(--hand);color:var(--green)}
+.rhead .meta{color:var(--muted);font-size:14.5px}
+.tools{margin-left:auto;display:flex;gap:6px}
+.tool{background:#fff;border:1px solid #cfd3c6;border-radius:3px;padding:4px 10px;font:600 14px var(--sans);color:var(--ink)}
+.tool:hover{border-color:var(--ink)}
+.tool[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.mapwrap{position:relative;overflow:hidden;flex:1;min-height:0;margin:0 22px 0 30px;border-top:1px solid #dfe3d8}
+#cy{position:absolute;inset:0;background-image:repeating-linear-gradient(transparent 0 31px,var(--rule) 31px 32px)}
+.key{display:flex;flex-wrap:wrap;gap:6px 20px;padding:10px 22px 14px 30px;border-top:1px solid #dfe3d8;font-size:14px;color:var(--muted)}
+.key span{display:inline-flex;align-items:center;gap:7px}
+.key i{display:inline-block;width:28px;height:0;border-top:2.5px solid var(--ink)}
+.key i.m{border-top-color:var(--red)}.key i.f{border-top:2px dashed var(--pencil)}
+.key i.c{width:13px;height:13px;border-radius:50%;border:1.6px solid var(--ink)}
+.key i.cr{width:15px;height:15px;border-radius:50%;border:2px solid var(--red);box-shadow:0 0 0 2px var(--sheet),0 0 0 3.5px var(--red)}
+.answer-tag{position:absolute;left:14px;top:12px;display:none;align-items:center;gap:10px;background:#fff8d6;border:1px solid #e3cf7e;padding:5px 6px 5px 12px;font:600 14px var(--sans);color:var(--text);box-shadow:0 3px 8px rgba(60,40,10,.15);transform:rotate(-1deg)}
+.answer-tag.show{display:flex}
+.answer-tag button{background:none;border:1px solid #cdb966;border-radius:2px;padding:1px 8px;font:600 13px var(--sans)}
+
+/* slip */
+.slip{position:absolute;right:16px;top:14px;bottom:14px;width:min(380px,calc(100% - 32px));background:#fff;box-shadow:0 10px 24px rgba(40,28,8,.22),0 1px 2px rgba(40,28,8,.2);
+  display:flex;flex-direction:column;transform:translateX(calc(100% + 40px)) rotate(1.2deg);transition:transform .38s cubic-bezier(.2,.8,.2,1);z-index:4}
+.slip.open{transform:none}
+.slip::before{content:"";position:absolute;left:50%;top:-9px;width:64px;height:20px;margin-left:-32px;background:rgba(232,220,178,.85);transform:rotate(-3deg);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.slip-h{display:flex;align-items:flex-start;gap:10px;padding:18px 18px 10px;border-bottom:1px solid var(--rule)}
+.slip-h h3{font:600 23px/1.15 var(--hand);color:var(--ink)}
+.slip-h p{font-size:14px;color:var(--muted)}
+.slip-h .x{margin-left:auto;background:none;border:0;font:700 22px/1 var(--sans);color:var(--muted);padding:2px 6px}
+.slip-b{overflow:auto;padding:12px 18px 20px;display:flex;flex-direction:column;gap:16px}
+.slip-b h4{font:600 16px var(--hand);color:var(--green);margin-bottom:2px}
+.riskline{display:flex;align-items:baseline;gap:10px}
+.riskline b{font:700 40px/1 var(--type)}
+.riskline b.high{color:var(--red)}.riskline b.medium{color:#9a5a00}
+.riskline span{font-size:14px;color:var(--muted)}
+.parts{display:grid;grid-template-columns:40fr 40fr 20fr;gap:4px;margin-top:8px}
+.parts div{height:8px;background:#ebece6;position:relative;border-radius:1px}
+.parts div i{position:absolute;inset:0 auto 0 0;background:var(--ink);border-radius:1px}
+.parts-l{display:grid;grid-template-columns:40fr 40fr 20fr;gap:4px;font-size:12.5px;color:var(--muted);margin-top:3px}
+.line{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px dotted #d3d6cc;font-size:15px}
+.line:last-child{border-bottom:0}
+.line button{background:none;border:0;padding:0;font-weight:600;color:var(--ink);text-decoration:underline;text-decoration-color:#b9bdd0;text-underline-offset:3px;text-align:left}
+.ids{font:700 14px var(--type);color:var(--ink-2)}
+.fir{font:14px/1.55 var(--type);background:#fbfbf8;border-left:1px solid var(--margin);padding:8px 10px;margin:4px 0 8px;color:#2a2d36}
+.refs{display:flex;flex-wrap:wrap;gap:5px}
+.refs span,.refs button{font:700 13px var(--type);border:1px solid #cfd3c6;padding:1px 6px;border-radius:2px;background:#fff;color:var(--ink)}
+.seen-btn{align-self:flex-start;background:none;border:2.5px double var(--violet);color:var(--violet);font:700 15px var(--sans);letter-spacing:.12em;text-transform:uppercase;padding:4px 14px;border-radius:4px;transform:rotate(-2deg)}
+.seen-btn[disabled]{opacity:.55;cursor:default}
+
+@media (max-width:1000px){
+  .spread{grid-template-columns:1fr;height:auto;margin:6px 12px 16px}
+  .right{order:-1;height:78vh;min-height:460px;border-radius:3px 3px 0 0}
+  .left{border-radius:0 0 3px 3px;min-height:70vh}
+  .tally{margin-left:0;width:100%;flex-wrap:wrap;gap:10px 16px}
+  header{padding:14px 16px 8px}
+}
+@media (max-width:560px){
+  .leaf,.flags,form.ask{padding-left:40px}.left{background-image:linear-gradient(90deg,transparent 30px,var(--margin) 30px,var(--margin) 31px,transparent 31px)}
+  .noting .para,.person-row .no{left:-34px;margin-left:-34px}
+  .rhead,.key{padding-left:16px;padding-right:16px}.mapwrap{margin:0 12px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="cover"><b>Criminal Network Analysis</b><span id="period"></span></div>
+  <div class="tally" id="tally"></div>
+  <span class="ai" id="ai"></span>
+</header>
+
+<main class="spread">
+  <section class="page left" aria-label="Notings">
+    <div class="flags" role="tablist">
+      <button class="flag" role="tab" data-t="alerts" aria-selected="true">Alerts<i id="n-alerts"></i></button>
+      <button class="flag" role="tab" data-t="people" aria-selected="false">People</button>
+      <button class="flag" role="tab" data-t="ask" aria-selected="false">Ask</button>
+    </div>
+    <div class="flagline"></div>
+    <div class="leaf" id="leaf"></div>
+    <form class="ask" id="ask"><input id="q" placeholder="Bunty ke calls dikhao…" autocomplete="off" aria-label="Ask the records"><button id="send" disabled>Ask</button></form>
+  </section>
+
+  <section class="page right" aria-label="Network map">
+    <div class="rhead">
+      <h2>Network map</h2>
+      <span class="meta" id="map-meta"></span>
+      <div class="tools">
+        <button class="tool" id="fit">Fit</button>
+        <button class="tool" id="objects" aria-pressed="false">Phones &amp; vehicles</button>
+      </div>
+    </div>
+    <div class="mapwrap">
+      <div id="cy"></div>
+      <div class="answer-tag" id="tag"><span id="tag-text"></span><button id="tag-clear">Clear</button></div>
+      <aside class="slip" id="slip" aria-live="polite">
+        <div class="slip-h"><div><h3 id="slip-title"></h3><p id="slip-sub"></p></div><button class="x" id="slip-x" aria-label="Close">×</button></div>
+        <div class="slip-b" id="slip-b"></div>
+      </aside>
+    </div>
+    <div class="key">
+      <span><i></i>Calls</span><span><i class="m"></i>Money</span><span><i class="f"></i>Named together in an FIR</span>
+      <span><i class="cr"></i>High risk</span><span><i class="c"></i>Person</span>
+    </div>
+  </section>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.30.2/cytoscape.min.js"></script>
+<script src="https://unpkg.com/layout-base@2.0.1/layout-base.js"></script>
+<script src="https://unpkg.com/cose-base@2.2.0/cose-base.js"></script>
+<script src="https://unpkg.com/cytoscape-fcose@2.2.0/cytoscape-fcose.js"></script>
+<script src="data.js"></script>
+<script src="core.js"></script>
+<script>
+const $ = s => document.querySelector(s)
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]))
+const C = getComputedStyle(document.documentElement), v = n => C.getPropertyValue(n).trim()
+const seen = new Set(JSON.parse((() => { try { return localStorage.getItem('cd-seen') } catch { return null } })() || '[]'))
+const saveSeen = () => { try { localStorage.setItem('cd-seen', JSON.stringify([...seen])) } catch {} }
+let tab = 'alerts', sel = null
+const qa = []
+
+const [p0, p1] = X.health.period
+$('#period').textContent = `Records ${X.shortDate(p0)} – ${X.shortDate(p1)} 2026 · synthetic data`
+$('#tally').innerHTML = [['firs', 'FIRs'], ['calls', 'calls'], ['transactions', 'transfers'], ['entities', 'people']].map(([k, l]) => `<span>${X.health[k]}<small>${l}</small></span>`).join('')
+$('#ai').textContent = X.llm.reachable ? 'AI on' : 'Rules only'; $('#ai').classList.toggle('off', !X.llm.reachable)
+
+// map
+const pairs = X.personPairs()
+let showObjects = false
+$('#map-meta').textContent = `${X.persons.length} people in ${X.G.communities.length} groups`
+function elements() {
+  const els = X.G.communities.map(c => ({ data: { id: 'g' + c.id, label: `Group ${c.id} — ${X.byId[c.lead].label}` }, classes: 'group' }))
+  for (const n of X.persons) els.push({ data: { id: n.id, label: n.label, parent: n.community ? 'g' + n.community : undefined, band: X.riskBand(n.risk), size: 14 + (n.score || 0) * 22 }, classes: 'person' })
+  for (const p of pairs) els.push({ data: { ...p, w: Math.min(4.5, 1.2 + p.weight / 14) }, classes: p.kind })
+  if (showObjects) {
+    const used = new Set()
+    for (const e of X.G.edges) {
+      const a = X.byId[e.source], b = X.byId[e.target]; if (!a || !b) continue
+      const obj = ['vehicle', 'org', 'phone'].includes(a.type) ? a : ['vehicle', 'org', 'phone'].includes(b.type) ? b : null, per = a.type === 'person' ? a : b.type === 'person' ? b : null
+      if (!obj || !per) continue
+      if (!used.has(obj.id)) { used.add(obj.id); els.push({ data: { id: obj.id, label: obj.label }, classes: 'object' }) }
+      els.push({ data: { id: 'o:' + e.id, source: per.id, target: obj.id }, classes: 'own' })
+    }
+  }
+  return els
+}
+const cy = cytoscape({
+  container: $('#cy'), elements: elements(), wheelSensitivity: .25, minZoom: .2, maxZoom: 1.5,
+  style: [
+    { selector: 'node.group', style: { shape: 'round-rectangle', 'corner-radius': 28, 'background-opacity': 0, 'border-width': 1.4, 'border-style': 'dashed', 'border-dash-pattern': [7, 5], 'border-color': v('--green'),
+      label: 'data(label)', 'text-valign': 'top', 'text-halign': 'center', 'text-margin-y': -4, 'font-family': 'Source Serif 4', 'font-weight': 600, 'font-size': 15, color: v('--green'), padding: 22 } },
+    { selector: 'node.person', style: { width: 'data(size)', height: 'data(size)', 'background-color': '#fff', 'border-width': 1.8, 'border-color': v('--ink'),
+      label: 'data(label)', 'text-valign': 'bottom', 'text-margin-y': 4, 'font-family': 'Hind', 'font-weight': 600, 'font-size': 13, color: v('--ink'),
+      'text-background-color': v('--sheet'), 'text-background-opacity': .85, 'text-background-padding': 1 } },
+    { selector: 'node.person[band="high"]', style: { 'border-color': v('--red'), 'border-width': 2.4, 'outline-width': 2, 'outline-color': v('--red'), 'outline-offset': 3, color: v('--red') } },
+    { selector: 'node.person[band="medium"]', style: { 'background-color': '#fbe6c2' } },
+    { selector: 'node.object', style: { shape: 'round-rectangle', width: 9, height: 9, 'background-color': v('--pencil'), label: 'data(label)', 'font-family': 'Courier Prime', 'font-size': 10, color: v('--pencil'), 'text-valign': 'bottom', 'text-margin-y': 2 } },
+    { selector: 'edge', style: { 'curve-style': 'bezier', 'control-point-step-size': 14, width: 'data(w)', 'line-color': v('--ink'), opacity: .78 } },
+    { selector: 'edge.money', style: { 'line-color': v('--red'), 'target-arrow-shape': 'none' } },
+    { selector: 'edge.fir', style: { 'line-style': 'dashed', 'line-dash-pattern': [5, 4], width: 1.3, 'line-color': v('--pencil') } },
+    { selector: 'edge.own', style: { width: .8, 'line-color': v('--pencil'), 'line-style': 'dotted' } },
+    { selector: '.dim', style: { opacity: .12 } },
+    { selector: 'node.group.dim', style: { opacity: .3 } },
+    { selector: 'edge.lit', style: { opacity: 1, 'z-index': 9, 'underlay-color': '#f3d36b', 'underlay-opacity': .8, 'underlay-padding': 4 } },
+    { selector: 'node.person.lit', style: { 'underlay-color': '#f3d36b', 'underlay-opacity': .9, 'underlay-padding': 6, 'underlay-shape': 'ellipse', 'z-index': 9 } },
+    { selector: 'node.person:selected', style: { 'underlay-color': '#f3d36b', 'underlay-opacity': 1, 'underlay-padding': 9, 'underlay-shape': 'ellipse' } },
+  ],
+  layout: { name: 'preset' },
+})
+const layout = () => cy.layout({ name: 'fcose', quality: 'proof', randomSeed: 7, animate: false, nodeRepulsion: 7000, idealEdgeLength: 95, nestingFactor: .5, gravity: .35, nodeSeparation: 80, tilingPaddingVertical: 40, tilingPaddingHorizontal: 40, stop: () => cy.fit(undefined, 30) }).run()
+layout()
+new ResizeObserver(() => cy.resize()).observe($('#cy'))
+$('#fit').onclick = () => cy.animate({ fit: { padding: 30 } }, { duration: 300 })
+$('#objects').onclick = e => { showObjects = !showObjects; e.target.setAttribute('aria-pressed', showObjects); cy.elements().remove(); cy.add(elements()); layout() }
+
+function mark(ids, text, etypes) {
+  cy.elements().removeClass('lit dim')
+  if (!ids?.length) { $('#tag').classList.remove('show'); return }
+  const set = new Set(ids)
+  const nodes = cy.nodes('.person').filter(n => set.has(n.id()))
+  const edges = cy.edges().filter(e => set.has(e.data('source')) && set.has(e.data('target')) && (!etypes || etypes.some(t => (t === 'call' && e.data('calls')) || (t === 'transfer' && e.data('txns')) || (t !== 'call' && t !== 'transfer'))))
+  cy.elements().not(nodes).not(edges).not('node.group').addClass('dim')
+  cy.nodes('.group').filter(g => !g.children().some(c => set.has(c.id()))).addClass('dim')
+  nodes.addClass('lit'); edges.addClass('lit')
+  $('#tag-text').textContent = text; $('#tag').classList.add('show')
+  cy.animate({ fit: { eles: nodes, padding: 110 } }, { duration: 420, easing: 'ease-out-cubic' })
+}
+$('#tag-clear').onclick = () => { mark(null); closeSlip() }
+
+// left page
+function renderLeaf() {
+  document.querySelectorAll('.flag').forEach(f => f.setAttribute('aria-selected', f.dataset.t === tab))
+  $('#n-alerts').textContent = X.alerts.length - seen.size || ''
+  const L = $('#leaf')
+  if (tab === 'alerts') {
+    L.innerHTML = `<h2>Alerts raised</h2><p class="lede">${X.alerts.length} patterns found in the records. Open one to see who is involved and the records behind it.</p>` +
+      X.alerts.map((a, i) => `<button class="noting ${sel?.alert === a.id ? 'sel' : ''}" data-a="${a.id}"><span class="para">${i + 1}.</span>
+        ${seen.has(a.id) ? '<span class="stamp">Seen</span>' : ''}<span class="kind ${a.severity}">${esc(X.ALERT_NAME[a.type])} · ${a.severity}</span><b>${esc(a.title)}</b><p>${esc(a.summary)}</p></button>`).join('')
+  } else if (tab === 'people') {
+    const ps = [...X.persons].sort((a, b) => (b.risk || 0) - (a.risk || 0))
+    L.innerHTML = `<h2>People, by risk</h2><p class="lede">Risk out of 100 = importance in the network + involvement in alerts + money moved.</p>` +
+      ps.map((n, i) => `<button class="person-row" data-p="${n.id}"><span class="no">${i + 1}.</span><span><b>${esc(n.label)}</b><small>${esc(n.role || 'person')} · ${n.community ? 'Group ' + n.community : 'no group'}</small></span><span class="r tab ${X.riskBand(n.risk)}">${n.risk ?? '–'}</span></button>`).join('')
+  } else {
+    L.innerHTML = `<div class="ask-sheet"><div><h2>Ask the records</h2><p class="lede">English or Hinglish. Each answer says whether rules or the AI wrote it, and which records it rests on.</p>
+      <div class="examples">${X.EXAMPLES.map(q => `<button data-q="${esc(q)}">${esc(q)}</button>`).join('')}</div></div>
+      ${qa.map((x, i) => `<div class="qa"><div class="q">${esc(x.q)}</div><div class="a">${esc(x.a ?? 'Looking through the records…')}</div>
+        ${x.r ? `<div class="src"><span>${x.r.answer_source === 'llm' ? 'Worded by AI, checked against records' : 'Rules template'} · ${Object.values(x.r.evidence || {}).flat().length} records</span>${x.r.highlight?.nodes?.length ? `<button data-show="${i}">Show on map</button>` : ''}</div>` : ''}</div>`).join('')}</div>`
+    L.scrollTop = L.scrollHeight
+  }
+}
+document.querySelector('.flags').onclick = e => { const f = e.target.closest('.flag'); if (f) { tab = f.dataset.t; renderLeaf(); if (tab === 'ask') $('#q').focus() } }
+$('#leaf').onclick = e => {
+  const a = e.target.closest('[data-a]'); if (a) return openAlert(a.dataset.a)
+  const p = e.target.closest('[data-p]'); if (p) return openPerson(p.dataset.p)
+  const q = e.target.closest('[data-q]'); if (q) return send(q.dataset.q)
+  const s = e.target.closest('[data-show]'); if (s) { const r = qa[s.dataset.show].r; mark(r.highlight.nodes, `Answer · ${r.highlight.nodes.length} people`, r.highlight.etypes) }
+}
+
+// slip
+function openSlip(title, sub, html) { $('#slip-title').textContent = title; $('#slip-sub').textContent = sub; $('#slip-b').innerHTML = html; $('#slip-b').scrollTop = 0; $('#slip').classList.add('open') }
+function closeSlip() { $('#slip').classList.remove('open'); sel = null; cy.$(':selected').unselect(); renderLeaf() }
+$('#slip-x').onclick = () => { mark(null); closeSlip() }
+$('#slip-b').onclick = e => { const p = e.target.closest('[data-p]'); if (p) return openPerson(p.dataset.p); const a = e.target.closest('[data-a]'); if (a) openAlert(a.dataset.a) }
+
+function openPerson(id) {
+  const e = X.entity(id), r = e.risk, b = r.breakdown; sel = { person: id }
+  const bar = (x, m) => `<div><i style="width:${x / m * 100}%"></i></div>`
+  openSlip(e.name, `${e.aliases.length ? 'Also called ' + e.aliases.join(', ') + ' · ' : ''}${e.role || 'person'} · Group ${e.metrics.community}`, `
+    <div><h4>Risk</h4><div class="riskline"><b class="tab ${r.level}">${r.score}</b><span>out of 100 · ${r.level}</span></div>
+      <div class="parts">${bar(b.centrality, 40)}${bar(b.alert_involvement, 40)}${bar(b.money_volume, 20)}</div>
+      <div class="parts-l"><span>Importance ${b.centrality}/40</span><span>Alerts ${b.alert_involvement}/40</span><span>Money ${b.money_volume}/20</span></div></div>
+    ${e.alerts.length ? `<div><h4>Named in alerts</h4><div class="refs">${e.alerts.map(a => `<button data-a="${a.id}">${a.id} ${esc(X.ALERT_NAME[a.type])}</button>`).join('')}</div></div>` : ''}
+    <div><h4>Closest contacts</h4>${e.connections.slice(0, 7).map(c => `<div class="line"><button data-p="${c.id}">${esc(c.name)}</button><span class="tab">${[c.calls ? c.calls + ' calls' : '', c.amount ? X.inr(c.amount) : ''].filter(Boolean).join(' · ') || esc(c.relation || 'FIR')}</span></div>`).join('')}</div>
+    <div><h4>Phones, vehicles, accounts</h4>${e.phones.map(p => `<div class="line"><span class="ids">${p.number}</span><span>${p.fir} · ${Math.round(p.confidence * 100)}% sure</span></div>`).join('')}${e.vehicles.map(x => `<div class="line"><span class="ids">${x}</span><span>vehicle</span></div>`).join('')}${e.accounts.map(x => `<div class="line"><span class="ids">${x}</span><span>account</span></div>`).join('')}</div>
+    <div><h4>In ${e.firs.length} FIRs</h4>${e.firs.map(f => `<div class="line"><span class="ids">${f.fir_id}</span><span>${f.date} · ${esc(f.station)}</span></div><p class="fir">${esc(f.text)}</p>`).join('')}</div>`)
+  mark([id, ...X.neighbours(id)], `${X.byId[id].label} and direct contacts`)
+  cy.$(':selected').unselect(); cy.$id(id).select(); renderLeaf()
+}
+function openAlert(id) {
+  const a = X.alerts.find(x => x.id === id); sel = { alert: id }
+  const ev = [...a.evidence.firs, ...a.evidence.txns, ...a.evidence.calls]
+  openSlip(a.title, `${a.id} · ${X.ALERT_NAME[a.type]} · ${a.severity}`, `
+    <p>${esc(a.summary)}</p>
+    ${a.time.start ? `<div class="line"><span>When</span><span class="tab">${a.time.start.slice(0, 16)} → ${a.time.end.slice(0, 16)}</span></div>` : ''}
+    <div><h4>People involved</h4>${a.entities.map(p => `<div class="line"><button data-p="${p}">${esc(X.byId[p]?.label || p)}</button><span class="tab">risk ${X.byId[p]?.risk ?? '–'}</span></div>`).join('')}</div>
+    <div><h4>Records behind it</h4><div class="refs">${ev.map(r => `<span>${r}</span>`).join('')}</div></div>
+    <button class="seen-btn" id="seen" ${seen.has(id) ? 'disabled' : ''}>${seen.has(id) ? 'Seen' : 'Stamp as seen'}</button>`)
+  $('#seen').onclick = () => { seen.add(id); saveSeen(); openAlert(id) }
+  mark(a.entities, `${a.id} · ${a.entities.length} people`); renderLeaf()
+}
+cy.on('tap', 'node.person', e => openPerson(e.target.id()))
+cy.on('tap', e => { if (e.target === cy) { mark(null); closeSlip() } })
+
+// ask
+const q = $('#q'); q.oninput = () => { $('#send').disabled = !q.value.trim() }
+$('#ask').onsubmit = e => { e.preventDefault(); if (q.value.trim()) send(q.value.trim()) }
+async function send(text) {
+  tab = 'ask'; q.value = ''; $('#send').disabled = true
+  const item = { q: text }; qa.push(item); renderLeaf()
+  try { const r = await X.ask(text); item.a = r.answer; item.r = r; if (r.highlight?.nodes?.length) mark(r.highlight.nodes, `Answer · ${r.highlight.nodes.length} people`, r.highlight.etypes) }
+  catch { item.a = 'Could not reach the backend on :8000. Start it and ask again.' }
+  renderLeaf()
+}
+renderLeaf()
+</script>
+</body>
+</html>

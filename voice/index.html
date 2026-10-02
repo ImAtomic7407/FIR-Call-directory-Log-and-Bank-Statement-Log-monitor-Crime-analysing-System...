@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>XEST Voice Chat</title>
+<style>
+  :root { --bg:#020617; --panel:#0f172a; --bot:#1e293b; --line:#334155; --txt:#e2e8f0; --mute:#64748b; --sky:#0284c7; --sky2:#38bdf8; --red:#e11d48; }
+  * { box-sizing:border-box }
+  body { margin:0; background:var(--bg); color:var(--txt); font:14px/1.5 system-ui,-apple-system,sans-serif; display:flex; justify-content:center; height:100vh }
+  main { width:min(560px,100%); display:flex; flex-direction:column; height:100%; border-inline:1px solid #1e293b; background:var(--panel) }
+  header { display:flex; align-items:center; justify-content:space-between; padding:10px 14px; border-bottom:1px solid #1e293b }
+  header b { font-size:13px; letter-spacing:.04em }
+  header small { color:var(--mute) }
+  select { background:var(--bg); color:#94a3b8; border:1px solid var(--line); border-radius:6px; font-size:11px; padding:2px 4px }
+  .tog { font-size:12px; color:#94a3b8; display:flex; gap:6px; align-items:center; cursor:pointer }
+  #log { flex:1; overflow:auto; padding:12px; display:flex; flex-direction:column; gap:10px }
+  .m { max-width:92%; padding:8px 12px; border-radius:10px; font-size:12.5px; white-space:pre-wrap }
+  .u { align-self:flex-end; background:var(--sky); color:#fff }
+  .b { background:var(--bot) }
+  .b .row { display:flex; gap:8px; margin-top:6px; padding-top:5px; border-top:1px solid var(--line); font-size:11px; color:var(--mute); align-items:center }
+  .b button { background:none; border:0; color:var(--mute); cursor:pointer; font-size:11px; padding:0 }
+  .b button:hover { color:var(--sky2) }
+  .chip { font:11px ui-monospace,monospace; background:#0b3a53; color:var(--sky2); padding:0 6px; border-radius:99px; margin-right:4px }
+  #status { min-height:20px; padding:0 14px; color:var(--sky2); font-size:12px }
+  form { display:flex; gap:8px; padding:10px 14px 14px }
+  input { flex:1; min-width:0; background:var(--bg); color:var(--txt); border:1px solid var(--line); border-radius:6px; padding:9px 12px; font-size:14px; outline:none }
+  input:focus { border-color:var(--sky) }
+  .send { background:var(--sky); color:#fff; border:0; border-radius:6px; padding:0 16px; font-weight:600; cursor:pointer }
+  .send:disabled { opacity:.4 }
+  .mic { width:42px; border-radius:50%; border:1px solid var(--line); background:var(--bg); color:var(--txt); font-size:18px; cursor:pointer }
+  .mic.on { background:var(--red); border-color:var(--red); animation:pulse 1.1s infinite }
+  @keyframes pulse { 50% { box-shadow:0 0 0 7px rgba(225,29,72,.25) } }
+  .sug { display:flex; flex-wrap:wrap; gap:4px; padding:6px 14px 0 }
+  .sug button { background:none; border:1px solid var(--line); border-radius:99px; color:#94a3b8; font-size:11px; padding:1px 9px; cursor:pointer }
+  .sug button:hover { border-color:var(--sky); color:var(--sky2) }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div><b>XEST · Voice</b> <small id="api"></small></div>
+    <div style="display:flex;gap:12px;align-items:center">
+      <select id="voiceSel" title="Voice"></select>
+      <label class="tog" title="After each answer, the mic opens again by itself"><input type="checkbox" id="conv" style="flex:none"> Hands-free</label>
+      <label class="tog"><input type="checkbox" id="speakOn" checked style="flex:none"> Speak</label>
+    </div>
+  </header>
+  <div id="log"></div>
+  <div id="status"></div>
+  <div class="sug" id="sug"></div>
+  <form id="f">
+    <button type="button" class="mic" id="mic" title="Speak (English / Hinglish)">🎙</button>
+    <input id="q" autocomplete="off" placeholder="Bolo ya type karo… English / Hinglish">
+    <button class="send" id="send">Send</button>
+  </form>
+</main>
+<script type="module">
+import { createVoice } from './speech.js'
+
+const API = new URLSearchParams(location.search).get('api') || 'http://127.0.0.1:8000'
+const SID = 'voice-' + Math.random().toString(36).slice(2, 8)
+const $ = id => document.getElementById(id)
+const SUGGEST = ['Who are the top 5 key persons?', 'Who is Bunty?', 'Koi suspicious pattern dikhao', 'Zubair ke contacts batao']
+$('api').textContent = API.replace('http://', '')
+
+const ERR = {
+  denied: 'Microphone permission is blocked. Allow it in the browser address bar.',
+  'no-speech': "Didn't catch that. Tap the mic and try again.",
+  'neural-unavailable': 'Natural voice server not reachable, using the basic browser voice. Start it with .venv/bin/python server.py',
+  unsupported: 'Voice input needs Chrome or Edge. You can still type.',
+}
+function say(txt) { $('status').textContent = txt || '' }
+
+function add(role, text, extra) {
+  const d = document.createElement('div')
+  d.className = 'm ' + (role === 'user' ? 'u' : 'b')
+  const t = document.createElement('div'); t.textContent = text; d.append(t)
+  if (role === 'bot') {
+    const row = document.createElement('div'); row.className = 'row'
+    const ids = [...(extra?.evidence?.alerts || []), ...(extra?.evidence?.firs || []), ...(extra?.evidence?.txns || []).slice(0, 8), ...(extra?.evidence?.calls || []).slice(0, 6)]
+    ids.forEach(i => { const c = document.createElement('span'); c.className = 'chip'; c.textContent = i; row.append(c) })
+    const rp = document.createElement('button'); rp.textContent = '🔊 replay'; rp.onclick = () => voice.speak(text)
+    row.append(rp); d.append(row)
+  }
+  $('log').append(d); $('log').scrollTop = 1e9
+}
+
+const voice = createVoice({
+  onState: s => { $('mic').classList.toggle('on', s === 'listening'); if (s === 'listening') say('Listening… bolo'); else if (s === 'speaking') say('Speaking…'); else say('') },
+  onInterim: t => { $('q').value = t },
+  onTranscript: t => { $('q').value = ''; ask(t) },
+  onSpoken: () => { if ($('conv').checked) voice.listen() },
+  onError: e => say(ERR[e] || 'Voice error: ' + e),
+})
+if (!voice.canListen) { $('mic').style.display = 'none'; say(ERR.unsupported) }
+
+async function ask(q) {
+  q = q.trim(); if (!q) return
+  $('q').value = ''; $('send').disabled = true
+  add('user', q); say('Looking through the records…')
+  try {
+    const r = await fetch(API + '/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: q, session_id: SID }) })
+    if (!r.ok) throw new Error(r.status)
+    const j = await r.json()
+    add('bot', j.answer, j); say('')
+    if ($('speakOn').checked) voice.speak(j.answer, /[ऀ-ॿ]/.test(q) ? 'hi' : undefined)
+  } catch {
+    add('bot', 'Backend not reachable. Is the API running on ' + API + '?'); say('')
+  }
+  $('send').disabled = false
+}
+
+fetch('/voices').then(r => r.json()).then(vs => {
+  vs.forEach(v => { const o = document.createElement('option'); o.value = v; o.textContent = v.replace(/Neural$/, '').replace('Multilingual', ''); $('voiceSel').append(o) })
+  const saved = localStorage.getItem('xest-voice'); if (saved && vs.includes(saved)) $('voiceSel').value = saved
+  voice.setVoice($('voiceSel').value)
+}).catch(() => { $('voiceSel').style.display = 'none' })
+$('voiceSel').onchange = e => { voice.setVoice(e.target.value); localStorage.setItem('xest-voice', e.target.value); voice.speak('Namaste, main aapki madad ke liye taiyaar hoon.') }
+
+$('f').onsubmit = e => { e.preventDefault(); voice.stop(); ask($('q').value) }
+$('mic').onclick = () => voice.listen()
+$('speakOn').onchange = e => { if (!e.target.checked) voice.stop() }
+SUGGEST.forEach(s => { const b = document.createElement('button'); b.textContent = s; b.onclick = () => ask(s); $('sug').append(b) })
+add('bot', 'Mic dabao aur English ya Hinglish mein poochho. Answer bolke bhi sunaunga.')
+</script>
+</body>
+</html>

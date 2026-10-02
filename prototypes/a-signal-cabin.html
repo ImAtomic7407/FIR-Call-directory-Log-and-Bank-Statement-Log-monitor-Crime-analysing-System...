@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Signal Cabin — Network Panel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cabin:#1b2022; --cabin-2:#262c2e; --bezel:#3a4144;
+  --enamel:#d3d9cc; --enamel-2:#c7cebf; --enamel-3:#bcc4b4; --grid:#c4cbbd;
+  --ink:#1c2123; --ink-2:#4a5355; --ink-3:#6c7577; --plate:#2b3133; --plate-ink:#e8ebe2;
+  --red:#d9352a; --red-dim:#7c231d; --amber:#f0a500; --amber-dim:#7a5711; --green:#3fae5a; --route:#f4b400;
+  --paper:#eef1e8;
+  --mono:'JetBrains Mono',ui-monospace,monospace; --cond:'Barlow Condensed',sans-serif; --sans:'Barlow',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{background:var(--cabin);color:var(--ink);font:15px/1.45 var(--sans);-webkit-font-smoothing:antialiased}
+::selection{background:var(--route);color:var(--ink)}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--route);outline-offset:2px}
+.tab{font-variant-numeric:tabular-nums}
+
+/* header */
+header{display:flex;align-items:center;gap:20px;padding:10px 18px;background:var(--cabin);color:var(--plate-ink);border-bottom:1px solid #000}
+.brand{display:flex;flex-direction:column;line-height:1.05}
+.brand b{font:700 20px var(--cond);letter-spacing:.04em;text-transform:uppercase}
+.brand span{font:500 12px var(--cond);letter-spacing:.08em;color:#9aa3a5;text-transform:uppercase}
+.counters{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap}
+.ctr{display:flex;align-items:center;gap:8px;background:#0c0f10;border:1px solid var(--bezel);border-radius:3px;padding:4px 10px 4px 8px}
+.ctr i{font:600 17px var(--mono);font-style:normal;color:var(--amber);letter-spacing:.06em}
+.ctr span{font:600 11px var(--cond);letter-spacing:.1em;text-transform:uppercase;color:#9aa3a5}
+.lamp-status{display:flex;align-items:center;gap:8px;font:600 12px var(--cond);letter-spacing:.1em;text-transform:uppercase;padding:6px 12px;border:1px solid var(--bezel);border-radius:3px}
+.lamp-status::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 0 2px #0c0f10}
+.lamp-status.off::before{background:var(--amber);box-shadow:0 0 0 2px #0c0f10}
+
+/* layout */
+.cabin{display:grid;grid-template-columns:288px minmax(0,1fr) 372px;grid-template-rows:minmax(0,1fr) 210px;gap:10px;padding:10px;height:calc(100vh - 62px);min-height:640px}
+.col{background:var(--cabin-2);border:1px solid #000;border-radius:4px;display:flex;flex-direction:column;min-height:0}
+.plate{display:flex;align-items:baseline;justify-content:space-between;gap:10px;background:var(--plate);color:var(--plate-ink);padding:9px 14px;border-bottom:1px solid #000;border-radius:4px 4px 0 0}
+.plate h2{font:700 15px var(--cond);letter-spacing:.08em;text-transform:uppercase}
+.plate small{font:500 12px var(--cond);letter-spacing:.06em;color:#a7b0b2;text-transform:uppercase}
+.scroll{overflow:auto;min-height:0}
+.scroll::-webkit-scrollbar{width:8px}.scroll::-webkit-scrollbar-thumb{background:var(--bezel);border-radius:4px}
+
+/* annunciator */
+.annun{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:10px}
+.win{position:relative;text-align:left;min-height:84px;padding:8px 9px;border-radius:2px;border:1px solid #000;background:#3b2522;color:#e9c9c4;display:flex;flex-direction:column;justify-content:space-between;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),inset 0 -2px 6px rgba(0,0,0,.35)}
+.win b{font:700 14px/1.08 var(--cond);letter-spacing:.04em;text-transform:uppercase}
+.win span{display:flex;justify-content:space-between;font:600 11px var(--mono);opacity:.85}
+.win.high{background:radial-gradient(120% 90% at 50% 40%,#f0574a 0%,var(--red) 55%,#b0271f 100%);color:#fff7f2;animation:flash 1.6s steps(1) infinite}
+.win.medium{background:radial-gradient(120% 90% at 50% 40%,#ffc84a 0%,var(--amber) 55%,#c88700 100%);color:#2a1d00;animation:flash 1.6s steps(1) infinite}
+.win.ack{animation:none}
+.win.ack.high{background:var(--red-dim);color:#f5d4cf}
+.win.ack.medium{background:var(--amber-dim);color:#fbe7bd}
+.win.sel{outline:2px solid #fff;outline-offset:-4px}
+.win .stamp{position:absolute;right:6px;top:6px;font:700 10px var(--cond);letter-spacing:.12em;border:1.5px solid currentColor;padding:0 4px;border-radius:2px;transform:rotate(-6deg);opacity:.9}
+@keyframes flash{0%{filter:none}50%{filter:brightness(.62) saturate(.8)}}
+@media (prefers-reduced-motion:reduce){.win.high,.win.medium{animation:none}}
+.annun-foot{display:flex;justify-content:space-between;align-items:center;padding:0 10px 10px;color:#a7b0b2;font:500 12px var(--cond);letter-spacing:.06em;text-transform:uppercase}
+.btn{background:#14181a;border:1px solid var(--bezel);color:var(--plate-ink);border-radius:3px;padding:6px 10px;font:600 12px var(--cond);letter-spacing:.08em;text-transform:uppercase;box-shadow:inset 0 -2px 0 rgba(0,0,0,.5)}
+.btn:hover{border-color:#6a7376}.btn:active{transform:translateY(1px);box-shadow:none}
+.btn.lit{background:var(--route);color:var(--ink);border-color:#000}
+
+.sections{padding:4px 10px 12px;display:flex;flex-direction:column;gap:4px}
+.sec-row{display:flex;align-items:center;gap:10px;padding:7px 8px;border-radius:3px;color:var(--plate-ink);background:transparent;border:1px solid transparent;text-align:left;width:100%}
+.sec-row:hover{border-color:var(--bezel)}
+.sec-row.on{background:#14181a;border-color:var(--bezel)}
+.sec-row i{width:22px;height:14px;border:1.5px solid #9aa3a5;border-radius:2px;flex:none;font:600 10px/11px var(--mono);font-style:normal;text-align:center;color:#c9d0d2}
+.sec-row b{font:600 14px var(--cond);letter-spacing:.04em;text-transform:uppercase}
+.sec-row small{margin-left:auto;font:500 12px var(--mono);color:#8d9698}
+.subhead{font:700 13px var(--cond);letter-spacing:.1em;text-transform:uppercase;color:#a7b0b2;padding:12px 18px 4px}
+
+/* panel */
+.panel{position:relative;background:var(--enamel);border:10px solid var(--bezel);border-radius:6px;box-shadow:inset 0 0 0 1px #000,inset 0 2px 14px rgba(0,0,0,.25);overflow:hidden;min-height:0;display:flex;flex-direction:column}
+.panel-plate{display:flex;align-items:center;gap:14px;padding:8px 12px;background:var(--enamel-2);border-bottom:1px solid #9ea796}
+.engrave{background:var(--plate);color:var(--plate-ink);font:700 14px var(--cond);letter-spacing:.12em;text-transform:uppercase;padding:4px 10px;border-radius:2px}
+.panel-plate .meta{font:500 13px var(--cond);letter-spacing:.06em;color:var(--ink-2);text-transform:uppercase}
+.panel-plate .tools{margin-left:auto;display:flex;gap:4px}
+.push{width:34px;height:30px;border-radius:3px;border:1px solid #6d766a;background:linear-gradient(#e9ede2,#cdd3c5);font:700 14px var(--cond);color:var(--ink);box-shadow:0 1px 0 rgba(255,255,255,.6) inset,0 2px 0 #8d9689}
+.push.wide{width:auto;padding:0 10px;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+.push:active{transform:translateY(1px);box-shadow:0 1px 0 #8d9689}
+#cy{flex:1;min-height:0;background-color:var(--enamel);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:40px 40px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center;padding:8px 12px;background:var(--enamel-2);border-top:1px solid #9ea796;font:600 12px var(--cond);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.trk{width:30px;height:0;border-top:3px solid var(--ink)}
+.trk.dbl{height:7px;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+.trk.dsh{border-top:2px dashed var(--ink-2)}
+.lmp{width:12px;height:12px;border-radius:50%;border:2px solid var(--ink)}
+.route-pill{position:absolute;left:50%;top:58px;transform:translateX(-50%);display:none;align-items:center;gap:10px;background:var(--plate);color:var(--plate-ink);padding:6px 6px 6px 14px;border-radius:3px;font:600 13px var(--cond);letter-spacing:.06em;text-transform:uppercase;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.route-pill.show{display:flex}
+.route-pill::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--route);box-shadow:0 0 0 2px #000}
+
+/* dossier */
+.dossier{background:var(--paper);color:var(--ink)}
+.dossier .plate{background:var(--plate)}
+.dos{padding:16px 18px 22px;display:flex;flex-direction:column;gap:18px}
+.dos h3{font:700 28px/1.05 var(--cond);letter-spacing:.01em;text-transform:uppercase}
+.dos .sub{color:var(--ink-2);font-size:14px;margin-top:4px}
+.dos h4{font:700 13px var(--cond);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);border-bottom:1px solid #c9cfc2;padding-bottom:5px;margin-bottom:8px}
+.risk{display:flex;align-items:flex-end;gap:14px}
+.risk-num{font:700 46px/0.9 var(--cond);font-variant-numeric:tabular-nums}
+.risk-num small{font-size:16px;color:var(--ink-3)}
+.risk-tag{font:700 12px var(--cond);letter-spacing:.12em;text-transform:uppercase;padding:3px 8px;border-radius:2px;color:#fff;background:var(--red)}
+.risk-tag.medium{background:var(--amber);color:var(--ink)}.risk-tag.low{background:var(--ink-3)}
+.scale{display:grid;grid-template-columns:40fr 40fr 20fr;gap:3px;margin-top:10px}
+.scale div{height:10px;background:#d8ddd1;border:1px solid #b7beb0;position:relative;overflow:hidden}
+.scale div i{position:absolute;inset:0 auto 0 0;background:var(--ink)}
+.scale-l{display:grid;grid-template-columns:40fr 40fr 20fr;gap:3px;font:500 11px var(--cond);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin-top:4px}
+.row{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px dotted #c3c9bd;font-size:14px}
+.row:last-child{border-bottom:0}
+.row button{background:none;border:0;padding:0;text-align:left;font-weight:600;text-decoration:underline;text-decoration-color:#9ea796;text-underline-offset:3px}
+.row button:hover{text-decoration-color:var(--ink)}
+.id{font:600 12px var(--mono);color:var(--ink-2)}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{font:600 12px var(--mono);border:1px solid #9ea796;background:#fff;border-radius:2px;padding:2px 6px}
+button.chip:hover{border-color:var(--ink)}
+.fir-text{font:13px/1.55 var(--mono);background:#fff;border:1px solid #c9cfc2;padding:10px;margin-top:6px;color:#2c3335}
+.lever{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#fff;border:1px solid #c9cfc2;border-radius:3px;padding:9px 10px;margin-bottom:6px}
+.lever:hover{border-color:var(--ink)}
+.lever .n{width:26px;height:26px;border-radius:50%;background:var(--plate);color:var(--plate-ink);display:grid;place-items:center;font:700 14px var(--cond);flex:none}
+.lever b{font:700 16px var(--cond);text-transform:uppercase;letter-spacing:.02em;display:block}
+.lever small{color:var(--ink-3);font-size:12.5px;display:block;line-height:1.3}
+.lever .r{margin-left:auto;font:700 20px var(--cond)}
+.ack-btn{align-self:flex-start;background:var(--plate);color:var(--plate-ink);border:0;border-radius:3px;padding:9px 14px;font:700 13px var(--cond);letter-spacing:.1em;text-transform:uppercase}
+.ack-btn[disabled]{opacity:.5;cursor:default}
+.summary{font-size:15px;line-height:1.55}
+
+/* console */
+.console{grid-column:1 / -1;flex-direction:row}
+.console .plate{border-radius:4px 0 0 4px;border-bottom:0;border-right:1px solid #000;flex-direction:column;align-items:flex-start;justify-content:flex-start;width:288px;flex:none;gap:10px}
+.console .plate p{font:14px/1.4 var(--sans);color:#b8c0c2}
+.ex{display:flex;flex-wrap:wrap;gap:5px}
+.ex button{background:transparent;border:1px solid var(--bezel);color:#d7dcd3;border-radius:2px;padding:3px 7px;font:500 12.5px var(--sans)}
+.ex button:hover{border-color:var(--route);color:#fff}
+.tele{flex:1;display:flex;flex-direction:column;min-width:0;background:#0f1314}
+.log{flex:1;padding:12px 16px;font:13.5px/1.55 var(--mono);color:#d9ded5}
+.log .q{color:var(--route)}
+.log .q::before{content:"> "}
+.log .a{margin:2px 0 12px;color:#d9ded5;white-space:pre-wrap}
+.log .src{display:inline-flex;gap:10px;align-items:center;font:600 11px var(--cond);letter-spacing:.1em;text-transform:uppercase;color:#8d9698;margin-bottom:12px}
+.log .src button{background:none;border:1px solid var(--bezel);color:var(--plate-ink);padding:1px 7px;border-radius:2px;font:inherit}
+.log .muted{color:#7c8587}
+form.ask{display:flex;gap:8px;padding:10px;border-top:1px solid #000;background:#14181a}
+form.ask input{flex:1;min-width:0;background:#0b0e0f;border:1px solid var(--bezel);border-radius:3px;color:#fff;padding:10px 12px;font:15px var(--mono);caret-color:var(--route)}
+form.ask input::placeholder{color:#76807f}
+form.ask button{background:var(--route);border:0;border-radius:3px;padding:0 18px;font:700 14px var(--cond);letter-spacing:.1em;text-transform:uppercase;color:var(--ink)}
+form.ask button[disabled]{opacity:.45}
+
+@media (max-width:1180px){
+  .cabin{grid-template-columns:1fr;grid-template-rows:auto;height:auto}
+  .alerts-col{order:1}.panel{order:0;height:68vh;min-height:420px}.dossier{order:2}.console{order:3;flex-direction:column}
+  .console .plate{width:auto;border-right:0;border-bottom:1px solid #000;border-radius:4px 4px 0 0}
+  .annun{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+  .log{max-height:320px}
+  .counters .ctr:nth-child(n+3){display:none}
+}
+@media (max-width:640px){
+  header{flex-wrap:wrap;gap:10px;padding:10px 16px}.counters{margin-left:0;order:3;width:100%}
+  .cabin{padding:8px}.panel{border-width:6px}.legend{font-size:11px}
+  .panel-plate .meta{display:none}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><b>Criminal Network Analysis</b><span id="period"></span></div>
+  <div class="counters" id="counters"></div>
+  <div class="lamp-status" id="ai"></div>
+</header>
+
+<main class="cabin">
+  <section class="col alerts-col" aria-label="Alerts">
+    <div class="plate"><h2>Alerts</h2><small id="alert-count"></small></div>
+    <div class="scroll">
+      <div class="annun" id="annun"></div>
+      <div class="annun-foot"><span>Flashing = not yet reviewed</span><button class="btn" id="ack-all">Acknowledge all</button></div>
+      <div class="subhead">Groups</div>
+      <div class="sections" id="sections"></div>
+    </div>
+  </section>
+
+  <section class="panel" aria-label="Network">
+    <div class="panel-plate">
+      <span class="engrave">Network panel</span>
+      <span class="meta" id="panel-meta"></span>
+      <div class="tools">
+        <button class="push" id="zin" title="Zoom in" aria-label="Zoom in">+</button>
+        <button class="push" id="zout" title="Zoom out" aria-label="Zoom out">−</button>
+        <button class="push wide" id="fit">Fit</button>
+        <button class="push wide" id="objects" aria-pressed="false">Phones &amp; vehicles</button>
+      </div>
+    </div>
+    <div class="route-pill" id="route"><span id="route-text"></span><button class="btn" id="route-clear">Clear</button></div>
+    <div id="cy"></div>
+    <div class="legend">
+      <span><i class="trk"></i>Calls</span>
+      <span><i class="trk dbl"></i>Money</span>
+      <span><i class="trk dsh"></i>Named together in FIR</span>
+      <span><i class="lmp" style="background:var(--red)"></i>High risk</span>
+      <span><i class="lmp" style="background:var(--amber)"></i>Medium</span>
+      <span><i class="lmp" style="background:#f6f4ea"></i>Low</span>
+    </div>
+  </section>
+
+  <section class="col dossier" aria-label="Details">
+    <div class="plate"><h2 id="dos-title">Most important</h2><small id="dos-sub">By network position</small></div>
+    <div class="scroll"><div class="dos" id="dos"></div></div>
+  </section>
+
+  <section class="col console" aria-label="Ask the records">
+    <div class="plate">
+      <h2>Ask the records</h2>
+      <p>English or Hinglish. Every answer lists the records behind it.</p>
+      <div class="ex" id="examples"></div>
+    </div>
+    <div class="tele">
+      <div class="log scroll" id="log" aria-live="polite"><div class="muted">Waiting for a question. Try “Bunty ke calls dikhao”.</div></div>
+      <form class="ask" id="ask"><input id="q" placeholder="Ask about a person, phone, FIR or money trail…" autocomplete="off"><button id="send" disabled>Send</button></form>
+    </div>
+  </section>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.30.2/cytoscape.min.js"></script>
+<script src="https://unpkg.com/layout-base@2.0.1/layout-base.js"></script>
+<script src="https://unpkg.com/cose-base@2.2.0/cose-base.js"></script>
+<script src="https://unpkg.com/cytoscape-fcose@2.2.0/cytoscape-fcose.js"></script>
+<script src="data.js"></script>
+<script src="core.js"></script>
+<script>
+const $ = s => document.querySelector(s)
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]))
+const C = getComputedStyle(document.documentElement), v = n => C.getPropertyValue(n).trim()
+const acked = new Set(JSON.parse((() => { try { return localStorage.getItem('cab-ack') } catch { return null } })() || '[]'))
+const saveAck = () => { try { localStorage.setItem('cab-ack', JSON.stringify([...acked])) } catch {} }
+let sel = null
+
+// header
+const [p0, p1] = X.health.period
+$('#period').textContent = `Records ${X.shortDate(p0)} – ${X.shortDate(p1)} 2026 · synthetic data`
+$('#counters').innerHTML = [['firs', 'FIRs'], ['calls', 'Calls'], ['transactions', 'Transfers'], ['entities', 'People']]
+  .map(([k, l]) => `<div class="ctr"><i>${String(X.health[k]).padStart(3, '0')}</i><span>${l}</span></div>`).join('')
+const ai = $('#ai'); ai.textContent = X.llm.reachable ? 'AI online' : 'Rules mode'; ai.classList.toggle('off', !X.llm.reachable)
+
+// graph
+const pairs = X.personPairs()
+let showObjects = false
+function elements() {
+  const els = X.G.communities.map(c => ({ data: { id: 'g' + c.id, label: `Group ${c.id} · ${X.byId[c.lead].label}` }, classes: 'group' }))
+  for (const n of X.persons) els.push({ data: { id: n.id, label: n.label, parent: n.community ? 'g' + n.community : undefined, band: X.riskBand(n.risk) }, classes: 'person' })
+  for (const p of pairs) els.push({ data: { ...p, w: Math.min(6, 2 + p.weight / 12) }, classes: p.kind + (p.cross ? ' cross' : '') })
+  if (showObjects) {
+    const keep = new Set(['vehicle', 'org', 'phone'])
+    const used = new Set()
+    for (const e of X.G.edges) {
+      const a = X.byId[e.source], b = X.byId[e.target]
+      if (!a || !b) continue
+      const obj = keep.has(a.type) ? a : keep.has(b.type) ? b : null, per = a.type === 'person' ? a : b.type === 'person' ? b : null
+      if (!obj || !per) continue
+      if (!used.has(obj.id)) { used.add(obj.id); els.push({ data: { id: obj.id, label: obj.label, kind: obj.type }, classes: 'object' }) }
+      els.push({ data: { id: 'o:' + e.id, source: per.id, target: obj.id }, classes: 'own' })
+    }
+  }
+  return els
+}
+const cy = cytoscape({
+  container: $('#cy'), elements: elements(), wheelSensitivity: 0.25, minZoom: 0.2, maxZoom: 3,
+  style: [
+    { selector: 'node.group', style: { shape: 'rectangle', 'background-color': v('--enamel-2'), 'background-opacity': .75, 'border-width': 1.5, 'border-color': v('--ink'),
+      label: 'data(label)', 'text-valign': 'top', 'text-halign': 'center', 'text-margin-y': -6, 'font-family': 'Barlow Condensed', 'font-weight': 700, 'font-size': 15,
+      'text-transform': 'uppercase', color: v('--plate-ink'), 'text-background-color': v('--plate'), 'text-background-opacity': 1, 'text-background-padding': 4, padding: 26 } },
+    { selector: 'node.person', style: { width: 18, height: 18, 'background-color': '#f6f4ea', 'border-width': 2.5, 'border-color': v('--ink'),
+      label: 'data(label)', 'text-valign': 'bottom', 'text-margin-y': 5, 'font-family': 'Barlow Condensed', 'font-weight': 600, 'font-size': 14, 'text-transform': 'uppercase',
+      color: v('--ink'), 'text-background-color': v('--enamel'), 'text-background-opacity': .9, 'text-background-padding': 1.5 } },
+    { selector: 'node.person[band="high"]', style: { 'background-color': v('--red'), width: 22, height: 22, 'underlay-color': v('--red'), 'underlay-opacity': .25, 'underlay-padding': 5, 'underlay-shape': 'ellipse' } },
+    { selector: 'node.person[band="medium"]', style: { 'background-color': v('--amber') } },
+    { selector: 'node.object', style: { shape: 'rectangle', width: 10, height: 10, 'background-color': v('--ink-2'), label: 'data(label)', 'font-family': 'JetBrains Mono', 'font-size': 9, color: v('--ink-2'), 'text-valign': 'bottom', 'text-margin-y': 3 } },
+    { selector: 'edge', style: { 'curve-style': 'straight', width: 'data(w)', 'line-color': v('--ink'), 'target-arrow-shape': 'none' } },
+    { selector: 'edge.cross', style: { 'curve-style': 'taxi', 'taxi-direction': 'auto', 'taxi-turn': '50%', 'taxi-turn-min-distance': 20 } },
+    { selector: 'edge.money', style: { 'line-color': v('--enamel'), width: 3, 'line-outline-width': 2.5, 'line-outline-color': v('--ink') } },
+    { selector: 'edge.fir', style: { 'line-style': 'dashed', 'line-dash-pattern': [6, 4], width: 1.5, 'line-color': v('--ink-2') } },
+    { selector: 'edge.own', style: { 'curve-style': 'straight', width: 1, 'line-color': v('--ink-3'), 'line-style': 'dotted' } },
+    { selector: '.dim', style: { opacity: .16 } },
+    { selector: 'node.group.dim', style: { opacity: .35 } },
+    { selector: 'edge.lit', style: { 'line-color': v('--route'), 'z-index': 9, opacity: 1 } },
+    { selector: 'edge.money.lit', style: { 'line-color': v('--route'), 'line-outline-color': v('--ink') } },
+    { selector: 'node.person.lit', style: { 'border-color': v('--ink'), 'border-width': 3, 'underlay-color': v('--route'), 'underlay-opacity': .55, 'underlay-padding': 7, 'underlay-shape': 'ellipse', 'z-index': 9 } },
+    { selector: 'node.person:selected', style: { 'border-width': 4, 'underlay-color': v('--route'), 'underlay-opacity': .9, 'underlay-padding': 8 } },
+  ],
+  layout: { name: 'preset' },
+})
+function layout(fit = true) {
+  // Each group is a yard: its lead sits at the centre, members ring it by importance.
+  const W = 460, H = 400, pos = {}
+  const slots = [...X.G.communities.map(c => c.id), null]
+  slots.forEach((cid, i) => {
+    const ox = (i % 3) * W, oy = Math.floor(i / 3) * H
+    const mem = X.persons.filter(n => (n.community ?? null) === cid).sort((a, b) => (b.score || 0) - (a.score || 0))
+    if (cid == null) { mem.forEach((n, k) => pos[n.id] = { x: ox + (k % 3) * 110 - 110, y: oy + Math.floor(k / 3) * 90 }); return }
+    const r = 70 + mem.length * 9
+    mem.forEach((n, k) => {
+      if (k === 0) return pos[n.id] = { x: ox, y: oy }
+      const a = -Math.PI / 2 + ((k - 1) / (mem.length - 1)) * Math.PI * 2
+      pos[n.id] = { x: ox + Math.cos(a) * r, y: oy + Math.sin(a) * r * .8 }
+    })
+  })
+  cy.nodes('.person').positions(n => pos[n.id()])
+  const objs = cy.nodes('.object')
+  if (objs.length) {
+    objs.positions(o => { const ps = o.neighborhood('node.person'); const bb = ps.boundingBox(); return { x: (bb.x1 + bb.x2) / 2 + (Math.random() - .5) * 60, y: (bb.y1 + bb.y2) / 2 + (Math.random() - .5) * 60 } })
+    cy.layout({ name: 'fcose', randomize: false, animate: false, quality: 'proof', nodeRepulsion: 4000, idealEdgeLength: 50,
+      fixedNodeConstraint: cy.nodes('.person').map(n => ({ nodeId: n.id(), position: pos[n.id()] })), stop: () => fit && cy.fit(undefined, 40) }).run()
+  } else if (fit) cy.fit(undefined, 40)
+}
+layout()
+new ResizeObserver(() => { cy.resize() }).observe($('#cy'))
+$('#zin').onclick = () => cy.zoom({ level: cy.zoom() * 1.25, renderedPosition: { x: cy.width() / 2, y: cy.height() / 2 } })
+$('#zout').onclick = () => cy.zoom({ level: cy.zoom() / 1.25, renderedPosition: { x: cy.width() / 2, y: cy.height() / 2 } })
+$('#fit').onclick = () => cy.animate({ fit: { padding: 40 } }, { duration: 300 })
+$('#objects').onclick = e => { showObjects = !showObjects; e.target.setAttribute('aria-pressed', showObjects); e.target.classList.toggle('lit', showObjects)
+  cy.elements().remove(); cy.add(elements()); layout(); if (sel) restore() }
+$('#panel-meta').textContent = `${X.persons.length} people · ${X.G.communities.length} groups · ${pairs.length} links`
+
+function setRoute(ids, text, etypes) {
+  cy.elements().removeClass('lit dim')
+  if (!ids || !ids.length) { $('#route').classList.remove('show'); return }
+  const set = new Set(ids)
+  const nodes = cy.nodes('.person').filter(n => set.has(n.id()))
+  const edges = cy.edges().filter(e => set.has(e.data('source')) && set.has(e.data('target')) && (!etypes || etypes.some(t => (t === 'call' && e.data('calls')) || (t === 'transfer' && e.data('txns')) || (t !== 'call' && t !== 'transfer'))))
+  cy.elements().not(nodes).not(edges).not('node.group').addClass('dim')
+  cy.nodes('.group').filter(g => !g.children().some(c => set.has(c.id()))).addClass('dim')
+  nodes.addClass('lit'); edges.addClass('lit')
+  $('#route-text').textContent = text; $('#route').classList.add('show')
+  cy.animate({ fit: { eles: nodes, padding: 90 } }, { duration: 420, easing: 'ease-out-cubic' })
+}
+$('#route-clear').onclick = () => { setRoute(null); cy.$(':selected').unselect(); sel = null; renderTop(); renderAnnun() }
+
+// annunciator
+function renderAnnun() {
+  $('#alert-count').textContent = `${X.alerts.length - acked.size} new · ${acked.size} reviewed`
+  $('#annun').innerHTML = X.alerts.map(a => `<button class="win ${a.severity} ${acked.has(a.id) ? 'ack' : ''} ${sel?.alert === a.id ? 'sel' : ''}" data-id="${a.id}" aria-pressed="${sel?.alert === a.id}">
+    ${acked.has(a.id) ? '<i class="stamp">Seen</i>' : ''}<b>${esc(X.ALERT_NAME[a.type] || a.type)}</b><span><em>${a.id}</em><em>${a.entities.length} people</em></span></button>`).join('')
+}
+$('#annun').onclick = e => { const b = e.target.closest('.win'); if (b) openAlert(b.dataset.id) }
+$('#ack-all').onclick = () => { X.alerts.forEach(a => acked.add(a.id)); saveAck(); renderAnnun(); if (sel?.alert) openAlert(sel.alert) }
+
+// groups
+$('#sections').innerHTML = X.G.communities.map(c => `<button class="sec-row" data-g="${c.id}"><i>${c.id}</i><b>${esc(X.byId[c.lead].label)}</b><small>${c.size} people</small></button>`).join('')
+$('#sections').onclick = e => { const b = e.target.closest('.sec-row'); if (!b) return
+  const c = X.comms[b.dataset.g]; const on = b.classList.toggle('on')
+  document.querySelectorAll('.sec-row').forEach(x => x !== b && x.classList.remove('on'))
+  on ? setRoute(c.members, `Group ${c.id} · ${c.size} people`) : setRoute(null) }
+
+// dossier
+function renderTop() {
+  $('#dos-title').textContent = 'Most important'; $('#dos-sub').textContent = 'By network position'
+  $('#dos').innerHTML = X.metrics.top5.map((t, i) => `<button class="lever" data-p="${t.id}"><span class="n">${i + 1}</span><span><b>${esc(t.name)}</b><small>${esc(t.reasons[0].replace(/^#\d+ of \d+ people — /, ''))}</small></span><span class="r tab">${X.byId[t.id].risk}</span></button>`).join('')
+    + `<p class="sub">Number on the right is the risk score out of 100. Click a person on the panel, or an alert, to see the records behind it.</p>`
+}
+function personHTML(id) {
+  const e = X.entity(id), r = e.risk, b = r.breakdown
+  const bar = (val, max) => `<div><i style="width:${(val / max) * 100}%"></i></div>`
+  return `<div><h3>${esc(e.name)}</h3><p class="sub">${e.aliases.length ? 'Also called ' + e.aliases.map(esc).join(', ') + ' · ' : ''}${esc(e.role || 'person')} · Group ${e.metrics.community}</p></div>
+  <div><h4>Risk</h4><div class="risk"><span class="risk-num tab">${r.score}<small>/100</small></span><span class="risk-tag ${r.level}">${r.level}</span></div>
+    <div class="scale">${bar(b.centrality, 40)}${bar(b.alert_involvement, 40)}${bar(b.money_volume, 20)}</div>
+    <div class="scale-l"><span>Importance ${b.centrality}/40</span><span>Alerts ${b.alert_involvement}/40</span><span>Money ${b.money_volume}/20</span></div></div>
+  ${e.alerts.length ? `<div><h4>In ${e.alerts.length} alert${e.alerts.length > 1 ? 's' : ''}</h4><div class="chips">${e.alerts.map(a => `<button class="chip" data-a="${a.id}">${a.id} · ${esc(X.ALERT_NAME[a.type])}</button>`).join('')}</div></div>` : ''}
+  <div><h4>Strongest links</h4>${e.connections.slice(0, 7).map(c => `<div class="row"><button data-p="${c.id}">${esc(c.name)}</button><span class="tab">${c.calls ? c.calls + ' calls' : ''}${c.calls && c.amount ? ' · ' : ''}${c.amount ? X.inr(c.amount) : ''}${!c.calls && !c.amount ? esc(c.relation || 'FIR') : ''}</span></div>`).join('')}</div>
+  <div><h4>Identifiers</h4>${e.phones.map(p => `<div class="row"><span class="id">${p.number}</span><span>${p.fir} · ${Math.round(p.confidence * 100)}% sure</span></div>`).join('')}
+    ${e.vehicles.map(x => `<div class="row"><span class="id">${x}</span><span>Vehicle</span></div>`).join('')}${e.accounts.map(x => `<div class="row"><span class="id">${x}</span><span>Bank account</span></div>`).join('')}</div>
+  <div><h4>Named in ${e.firs.length} FIRs · matched ${Math.round(e.resolution.confidence * 100)}% sure</h4>${e.firs.map(f => `<details><summary class="row" style="cursor:pointer"><span class="id">${f.fir_id}</span><span>${f.date} · ${esc(f.station)}</span></summary><p class="fir-text">${esc(f.text)}</p></details>`).join('')}</div>`
+}
+function openPerson(id, fromGraph) {
+  sel = { person: id }; renderAnnun()
+  $('#dos-title').textContent = 'Person'; $('#dos-sub').textContent = id
+  $('#dos').innerHTML = personHTML(id); $('#dos').parentElement.scrollTop = 0
+  const n = [id, ...X.neighbours(id)]
+  setRoute(n, `${X.byId[id].label} and ${n.length - 1} direct links`)
+  cy.$(':selected').unselect(); cy.$id(id).select()
+}
+function openAlert(id) {
+  const a = X.alerts.find(x => x.id === id); sel = { alert: id }; renderAnnun()
+  $('#dos-title').textContent = X.ALERT_NAME[a.type]; $('#dos-sub').textContent = `${a.id} · ${a.severity}`
+  const ev = [...a.evidence.firs, ...a.evidence.txns, ...a.evidence.calls]
+  $('#dos').innerHTML = `<div><h3>${esc(a.title)}</h3><p class="sub">${a.time.start ? `${a.time.start.slice(0, 16)} → ${a.time.end.slice(0, 16)}` : 'No single time window'}</p></div>
+    <p class="summary">${esc(a.summary)}</p>
+    <div><h4>People involved</h4>${a.entities.map(p => `<div class="row"><button data-p="${p}">${esc(X.byId[p]?.label || p)}</button><span class="tab">risk ${X.byId[p]?.risk ?? '–'}</span></div>`).join('')}</div>
+    <div><h4>Records behind this alert · ${ev.length}</h4><div class="chips">${ev.map(r => `<span class="chip">${r}</span>`).join('')}</div></div>
+    <button class="ack-btn" id="ack" ${acked.has(id) ? 'disabled' : ''}>${acked.has(id) ? 'Reviewed' : 'Mark as reviewed'}</button>`
+  $('#ack').onclick = () => { acked.add(id); saveAck(); openAlert(id) }
+  setRoute(a.entities, `${a.id} · ${a.entities.length} people`)
+}
+function restore() { if (sel?.person) openPerson(sel.person); else if (sel?.alert) openAlert(sel.alert) }
+$('#dos').onclick = e => { const p = e.target.closest('[data-p]'); if (p) return openPerson(p.dataset.p); const a = e.target.closest('[data-a]'); if (a) openAlert(a.dataset.a) }
+cy.on('tap', 'node.person', e => openPerson(e.target.id(), true))
+cy.on('tap', e => { if (e.target === cy) $('#route-clear').click() })
+
+// console
+$('#examples').innerHTML = X.EXAMPLES.map(q => `<button>${esc(q)}</button>`).join('')
+$('#examples').onclick = e => { if (e.target.tagName === 'BUTTON') send(e.target.textContent) }
+const q = $('#q'); q.oninput = () => { $('#send').disabled = !q.value.trim() }
+$('#ask').onsubmit = e => { e.preventDefault(); if (q.value.trim()) send(q.value.trim()) }
+async function send(text) {
+  const log = $('#log'); if (log.querySelector('.muted:only-child')) log.innerHTML = ''
+  q.value = ''; $('#send').disabled = true
+  const box = document.createElement('div'); box.innerHTML = `<div class="q">${esc(text)}</div><div class="a muted">Searching the records…</div>`; log.append(box); log.scrollTop = log.scrollHeight
+  try {
+    const r = await X.ask(text)
+    const ev = Object.values(r.evidence || {}).flat().length
+    box.querySelector('.a').classList.remove('muted'); box.querySelector('.a').textContent = r.answer
+    const src = document.createElement('div'); src.className = 'src'
+    src.innerHTML = `<span>${r.answer_source === 'llm' ? 'Worded by AI, checked against records' : 'Rules template'}</span><span>${ev} records</span>${r.highlight?.nodes?.length ? '<button>Show on panel</button>' : ''}`
+    box.append(src)
+    if (r.highlight?.nodes?.length) { const show = () => setRoute(r.highlight.nodes, `Answer · ${r.highlight.nodes.length} people`, r.highlight.etypes); src.querySelector('button').onclick = show; show() }
+  } catch (err) { box.querySelector('.a').textContent = 'Could not reach the backend on :8000. Start it and ask again.' }
+  log.scrollTop = log.scrollHeight
+}
+
+renderAnnun(); renderTop()
+</script>
+</body>
+</html>
